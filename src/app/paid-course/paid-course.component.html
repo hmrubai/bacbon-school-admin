@@ -58,6 +58,10 @@
                     <a class="btn btn-icon btn-success btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="All Subject List" [routerLink]="['/paid-course-subjects',item.id]">
                       <i class="fa fa-list-alt"></i>
                     </a>
+                    <a class="btn btn-icon btn-warning btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="All Mentor List" [routerLink]="['/paid-course-mentors',item.id]">
+                      <i class="fa fa-users"></i>
+                    </a>
+                    
                     <!--<a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" *ngIf="item.total_participated <= 0" [placement]="'bottom'" ngbTooltip="Delete"
                       target="_blank" (click)="deleteSelectionTest(item)">
                       <i class="fa fa-trash"></i>

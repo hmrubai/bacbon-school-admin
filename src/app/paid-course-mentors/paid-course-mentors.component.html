@@ -1,0 +1,115 @@
+<block-ui>
+
+  <div class="row ">
+    <div class="col-12 ">
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-10 col-12">
+            <h5>PAID COURSE - EXPERTS</h5>
+          </div>
+          <div class="col-md-2 col-12 text-right">
+            <button class="btn btn-secondary btn-mini float-right" [placement]="'left'" ngbTooltip="Back" (click)="backToLocation()">
+              <i class="fa fa-arrow-circle-left "></i> Back 
+            </button>
+            <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Add New Expert" (click)="openModal(template)">
+              <i class="fa fa-plus"></i> Add New Expert
+            </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"># </th>
+                  <th scope="col">Expert Name</th>
+                  <th scope="col">Mobile</th>
+                  <th scope="col">Email</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of paidCourseMentorList; let i=index">
+                  <td>{{i+1}}</td>
+                  <td>
+                      <strong>{{item.name}}</strong>
+                  </td>
+                  <td>
+                    <span>{{item.mobile_number}}</span>
+                  </td>
+                  <td>
+                    <span>{{item.email}}</span>
+                  </td>
+                  <td>
+                    <a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Delete" (click)="deleteMentor(item)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngIf="paidCourseMentorList.length <= 0">
+                  <td colspan="5">
+                    <span>No Data Found!</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="featuresForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+                <label class="col-form-label required">Select Expert </label>
+                <ng-select formControlName="mentor_id" (change)="selectExpert($event)" [ngClass]="{ 'is-invalid': submitted && ff.mentor_id.errors }"
+                    [clearable]="false" [clearOnBackspace]="false" [items]="allMentorList" bindLabel="name"
+                    bindValue="id" placeholder="Select Expert">
+                </ng-select>
+                <div *ngIf="submitted && ff.mentor_id.errors" class="error-text">
+                    <span *ngIf="ff.mentor_id.errors.required" class="text-danger">Expert is required</span>
+                    <span *ngIf="ff.mentor_id.errors.maxlength" class="text-danger">Expert must be within 250 characters</span>
+                </div>
+            </div>
+          </div>
+          <div class="col-12">
+            
+            <h3 class="mb-0"><i class="fa fa-users"></i>&nbsp; Expert List</h3>
+            <hr>
+            <ul class="list">
+                <li class="list-item" *ngFor="let item of selectedMentor; let i=index">
+                    <div class="row mt-1">
+                        <div class="col-lg-10">
+                            {{ item.name }} - {{ item.mobile_number }}
+                        </div>
+                        <div class="col-lg-2">
+                            <button class="btn btn-danger btn-sm" (click)="removeMentorList(i, item)"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-item" *ngIf="selectedMentor.length <= 0">
+                  No Expert has beed added!
+                </li>
+            </ul>
+        </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onSelectedMentorSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>
