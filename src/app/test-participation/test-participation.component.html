@@ -1,0 +1,104 @@
+<block-ui>
+
+  <div class="card ">
+    <div class="card-header">
+      <h2 class="mb-0"><i class="fa fa-file"></i>&nbsp;
+        Test Progress</h2>
+    </div>
+    <div class="card-body p-0 m-0">
+      <ng-container *ngFor="let item of classes">
+        <div class="card card-border-default">
+          <div class="card-header p-0">
+            <div class="alert alert-info p-2 m-0 cursor-pointer" (click)="item.collapsed = !item.collapsed"
+              [attr.aria-expanded]="!item.collapsed">
+              <button class="btn btn-icon btn-mini"
+                [ngClass]="{'btn-success': item.collapsed, 'btn-danger': !item.collapsed }">
+                <i class="feather" [ngClass]="{'icon-plus': item.collapsed, 'icon-minus': !item.collapsed }"></i>
+              </button> {{item.Name}}
+            </div>
+            <!-- <h5><i class="fa fa-video"></i> Videos Completed</h5> -->
+          </div>
+          <div class="card-body p-0 pb-2" id="collapse{{item.ID}}" [collapse]="item.collapsed" [isAnimated]="true">
+            
+                <div class="row ">
+                  <div class="col-md-6 col-lg-6 col-12 " *ngFor="let item of item.Test; let i=index">
+    
+                    <div class="card ">
+                      <div class="card-header row">
+                        <div class="col-md-10 col-12">
+                          <h5> <strong>{{item.Name}}</strong> </h5><br>
+                          <span>Sorted by highest participation count</span>
+                        </div>
+                        <div class="col-md-2 col-12  text-right">
+    
+                          <!-- <button class="btn  btn-info btn-mini ml-1 mb-1" (click)="downloadSample(item.ID)" [placement]="'top'"
+                        ngbTooltip="Download Excel"  queryParamsHandling="merge">
+                        <i class="feather icon-download"></i>
+                      </button> -->
+                          <button class="btn btn-info btn-mini ml-1 mb-1"
+                            [routerLink]="['/test-participation-list', item.ID]" [placement]="'top'" ngbTooltip="Show All">
+                            <i class="fa fa-list"> Show All</i>
+                          </button>
+    
+                        </div>
+    
+    
+                      </div>
+    
+                      <div class="card-body p-0 m-0">
+                        <div class="table-responsive">
+    
+                          <table class="table table-sm table-hover table-bordered table-striped">
+                            <thead>
+                              <tr>
+                                <th scope="col"># </th>
+                                <th scope="col">TEST</th>
+                                <th scope="col">PARTICIPATION (TIMES) </th>
+    
+                              </tr>
+                            </thead>
+    
+                            <tbody>
+                              <tr *ngFor="let test of item.SmallTests; let i=index">
+                                <td class="text-wrap" style="width: 10%">
+                                  {{i+1}}
+                                </td>
+                                <td>
+                                  
+                                  <span>{{test.Name}} </span>
+                                </td>
+                                <td class="text-wrap" style="width: 10%">
+                                  {{test.Participation}}
+                                </td>
+    
+    
+                              </tr>
+    
+    
+                            </tbody>
+    
+                          </table>
+    
+                        </div>
+                      </div>
+    
+    
+    
+                    </div>
+    
+                  </div>
+                </div>
+    
+    
+             
+            </div>
+           
+        </div>
+      </ng-container>
+
+
+    </div>
+
+  </div>
+
+</block-ui>

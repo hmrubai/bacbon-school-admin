@@ -1,0 +1,130 @@
+<block-ui>
+  <h2 class="hearder-color pl-2 "><b>Video Spent Hour List</b></h2>
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card card-border-default">
+        <div class="card-header">
+          <h5>SPENT HOURS ON VIDEOS</h5>
+          <!-- <button class="btn btn-secondary btn-sm float-right" [routerLink]="[ '/employee' ]"><i
+                    class=" icofont icofont-list "></i> Employee List</button> -->
+        </div>
+
+        <div class="card-body">
+          <div class="row">
+            <div class="col-md-12">
+              <form [formGroup]="filterForm" class="row">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <input type="text" formControlName="name" class="form-control"
+                      placeholder="Search By name or mobile no." (keyup)='filterDatatable($event)' />
+                  </div>
+                </div>
+           
+               
+              </form>
+
+            </div>
+
+          </div>
+          <div class="row">
+            <div class="col-lg-12 ">
+
+              <ngx-datatable class="material table-bordered" [rows]="rows" [loadingIndicator]="loadingIndicator"
+                [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" [limit]="10" rowHeight="auto">
+
+                <ngx-datatable-column [width]="200" name="Learner Name" [draggable]="false" [sortable]="false">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                      <a class="text-wrap" title="{{row['Name']}}" target="_blank" [routerLink]="['/learner-details',row.ID]">
+                          <img *ngIf="row['Picture'] " [src]="baseUrl+row['Picture']"
+                              class="rounded-circle" width="40"  >
+                          <img *ngIf="!row['Picture']"
+                              src="assets/images/user/user-avatar-blank.png"
+                              class="rounded-circle" width="40" >
+                          <!-- <img *ngIf="!row['Picture'] && row['Gender']=='Others'"
+                              src="assets/images/user/other.jpg" alt="{{row['FirstName']}}
+                              {{row['LastName']}}" class="rounded-circle" width="40" />
+                          <img *ngIf="!row['Picture'] && row['Gender']=='Male'"
+                              src="assets/images/user/male.jpg" alt="{{row['FirstName']}}
+                              {{row['LastName']}}" class="rounded-circle" width="40" />
+                          <img *ngIf="!row['Picture'] && row['Gender']=='Female'"
+                              src="assets/images/user/female.jpg" alt="{{row['FirstName']}}
+                              {{row['LastName']}}" class="rounded-circle" width="40" /> -->
+    
+                          </a>
+                      <a class="text-dark" target="_blank" [routerLink]="['/learner-details',row.ID]"> {{row['LearnerName']}}
+                      </a>
+                  </ng-template>
+              </ngx-datatable-column>
+    
+
+
+                <ngx-datatable-column name="Class" prop="ClassName" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [width]="200" name="School" prop="School" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [width]="150" name="Area" prop="Area" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Gender" prop="Gender" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Age" prop="Age" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+<!-- 
+                <ngx-datatable-column name="Mobile" prop="Mobile" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column> -->
+
+                <ngx-datatable-column name="Spent Time" prop="SpentTime" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column [maxWidth]="100" name="View" [draggable]="false" [sortable]="false"
+                  headerClass="text-center" cellClass="text-center">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'"
+                       ngbTooltip="View Learner's Details"
+                       target="_blank" [routerLink]="['/learner-details',row.ID]">
+                      <i class="feather icon-eye"></i>
+                  </a>
+                  </ng-template>
+                </ngx-datatable-column>
+
+              </ngx-datatable>
+
+            </div>
+
+
+
+          </div>
+
+
+        </div>
+
+
+      </div>
+    </div>
+  </div>
+</block-ui>

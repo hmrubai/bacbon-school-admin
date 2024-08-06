@@ -1,0 +1,85 @@
+<block-ui>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card card-border-default">
+        <div class="card-header">
+          <div class="row">
+            <div class="col-6">
+              <h5><i class="fa fa-phone"></i>&nbsp;Tutor Call List Details</h5>
+              <span><strong>Total#{{TotalCount}}</strong></span>
+            </div>
+            <div class="col-6">
+              <form [formGroup]="filterForm" class="row">
+                    <div class="input-group">
+                      <input type="text" formControlName="date"  type="text" class="form-control"
+                      bsDaterangepicker [maxDate]="maxDate" [bsConfig]="bsConfig"
+                      placeholder="Select a date range"  aria-describedby="basic-addon2">
+                      <div class="input-group-append">
+                        <button class="btn btn-outline-info" type="button" (click)="getList()"><i class="fa fa-eye"></i> Preview</button>
+            
+                      </div>
+                    </div>
+                
+              </form>
+            </div>
+          </div>
+         
+        </div>
+
+        <div class="card-body">
+         
+            <div class="col-12 ">
+
+              <ngx-datatable class="material table-bordered" [rows]="rows" [loadingIndicator]="loadingIndicator"
+                [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" [limit]="10" rowHeight="auto">
+
+                <ngx-datatable-column [width]="60" name="Sl" prop="Id" [draggable]="false" [sortable]="false">
+                  <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                    <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Phone Number" prop="PhoneNumber" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Call Type" prop="CallType" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Call Duration" prop="CallDuration" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Call Time" prop="CreatedOn" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value | amFromUtc | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+             
+
+
+              
+
+              </ngx-datatable>
+
+            </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+ 
+</block-ui>

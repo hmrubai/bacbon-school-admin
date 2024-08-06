@@ -1,0 +1,155 @@
+<block-ui>
+  <div class="row ">
+    <div class="col-12" *ngIf="is_loaded">
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-10 col-12">
+            <h5>WRITTEN EXAM MARKS ENTRY</h5>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="table-responsive">
+                <table class="table table-sm table-hover table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col">#</th>
+                      <th scope="col">Marks</th>
+                      <th scope="col">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let marks of WrittenMarks; let i=index">
+                      <td>Question {{i+1}}</td>
+                      <td> 
+                        <input type="number" class="form-control" [(ngModel)]="marks.mark">
+                      </td>
+                      <td>
+                        <button class="btn btn-mini btn-success" (click)="updateMarkes(marks)">Update</button> 
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <br/>
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-10 col-12">
+            <h5>WRITTEN EXAM DETAILS</h5>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="row">
+            <div class="gallery_product col-lg-3 col-md-3 col-sm-3 col-xs-6 filter hdpe"  *ngFor="let attachment of paidCourseWrittenResult.written_attachment; let i=index">
+                <a href="{{ attachment.attachment_url }}" target="_blank"><img src="{{ attachment.attachment_url }}" width="300px" height="400px" alt=""></a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Coupon Code </label>
+              <input type="text" formControlName="coupon_code" [ngClass]="{ 'is-invalid': submitted && f.coupon_code.errors }"
+                placeholder="Enter Coupon Code" type="text" class="form-control" />
+              <div *ngIf="submitted && f.coupon_code.errors" class="error-text">
+                <span *ngIf="f.coupon_code.errors.required" class="text-danger"> Coupon Code is required</span>
+                <span *ngIf="f.coupon_code.errors.maxlength" class="text-danger">Coupon Code must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Coupon Amount </label>
+              <input type="number" formControlName="coupon_value" [ngClass]="{ 'is-invalid': submitted && f.coupon_value.errors }"
+                placeholder="Enter Coupon Amount" class="form-control" />
+              <div *ngIf="submitted && f.coupon_value.errors" class="error-text">
+                <span *ngIf="f.coupon_value.errors.required" class="text-danger">Coupon Value is required</span>
+                <span *ngIf="f.coupon_value.errors.maxlength" class="text-danger">Coupon Value must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Select Course </label>
+              <ng-select formControlName="paid_course_id" [ngClass]="{ 'is-invalid': submitted && f.paid_course_id.errors }"
+                [clearable]="false" [clearOnBackspace]="false" [items]="paidCourseList" bindLabel="name" bindValue="id"
+                placeholder="Select a Course">
+              </ng-select>
+              <div *ngIf="submitted && f.paid_course_id.errors" class="error-text">
+                <span *ngIf="f.paid_course_id.errors.required" class="text-danger">Course is required</span>
+                <span *ngIf="f.paid_course_id.errors.maxlength" class="text-danger">Course must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label">Limit </label>
+              <input type="text" formControlName="limit" [ngClass]="{ 'is-invalid': submitted && f.limit.errors }"
+                placeholder="Enter Limit" type="number" class="form-control" />
+              <div *ngIf="submitted && f.limit.errors" class="error-text">
+                <span *ngIf="f.limit.errors.required" class="text-danger">Limit is required</span>
+                <span *ngIf="f.limit.errors.maxlength" class="text-danger">Limit must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label">Expiry Date </label>
+              <input type="text" formControlName="expiry_date" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.expiry_date.errors }"
+                placeholder="Enter Expiry Date" type="datetime-local" class="form-control" />
+              <div *ngIf="submitted && f.expiry_date.errors" class="error-text">
+                <span *ngIf="f.expiry_date.errors.required" class="text-danger">Expiry Date is required</span>
+                <span *ngIf="f.expiry_date.errors.maxlength" class="text-danger">Expiry Date must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label">Remarks </label>
+              <textarea rows="3" type="text" formControlName="remarks" placeholder="Enter Remarks." class="form-control"></textarea>
+              <div *ngIf="submitted && f.remarks.errors" class="error-text">
+                <span *ngIf="f.remarks.errors.required" class="text-danger">Remarks is required</span>
+                <span *ngIf="f.remarks.errors.maxlength" class="text-danger">Remarks must be within 500 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+              <div class="form-group row">
+                  <div class="col-12">
+                      <div class="custom-control custom-checkbox col-form-label">
+                        <input type="checkbox" formControlName="is_active" class="custom-control-input" style="left: 2px !important;" [ngClass]="{ 'is-invalid': submitted && f.is_active.errors }" id="is_only_test">
+                        <label class="custom-control-label" for="is_active"> Is Active?</label>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>

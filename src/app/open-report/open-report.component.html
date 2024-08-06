@@ -1,0 +1,76 @@
+<block-ui>
+            <div class="card ">
+                <div class="card-header">
+                    <h2 class="mb-0"><i class="fa fa-phone"></i>&nbsp;
+                        Open Report</h2>
+                </div>
+               
+                <div class="card-body ">
+                    <div class="row ">
+                        <div class="col-12">
+                            <form [formGroup]="filterForm">
+                                <div class="form-group row">
+
+                                    <label class="col-lg-1 col-md-2 col-12 col-form-label text-right required"> Date
+                                        Range
+                                    </label>
+                                    <div class="col-lg-3 col-md-4 col-12">
+
+                                        <input formControlName="date"
+                                            [ngClass]="{ 'is-invalid': submitted && f.date.errors }" type="text"
+                                            class="form-control" bsDatepicker [maxDate]="maxDate" [bsConfig]="bsConfig"
+                                            placeholder="Select a date range">
+
+                                        <div *ngIf="submitted && f.date.errors" class="error-text">
+                                            <span *ngIf="f.date.errors.required" class="text-danger">Date is
+                                                required</span>
+                                        </div>
+                                    </div>
+                                    <label class="col-lg-1 col-md-2 col-12 col-form-label text-right required"> Report
+                                    </label>
+                                    <div class="col-lg-3 col-md-4 col-12">
+
+                                        <ng-select formControlName="report"
+                                            [ngClass]="{ 'is-invalid': submitted && f.report.errors }"
+                                            [clearable]="false" [clearOnBackspace]="false" [items]="reportList"
+                                            bindLabel="Name" bindValue="Id" placeholder="Select a report">
+                                        </ng-select>
+                                        <div *ngIf="submitted && f.report.errors" class="error-text">
+                                            <span *ngIf="f.report.errors.required" class="text-danger">
+                                                Report is required
+                                            </span>
+
+                                        </div>
+                                    </div>
+
+
+
+
+                                    <div class="col-lg-4 col-md-6 col-12">
+                                        <button type="button" class="btn btn-success btn-md mr-1 mb-1"
+                                            (click)="showReport('Excel')"><i class="feather icon-download"></i> Generate
+                                            Report
+                                        </button>
+
+
+                                    </div>
+
+
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-12 ">
+                            <div style=" height: 600px">
+                                <ng2-pdfjs-viewer #pdfViewerOnDemand
+                                    downloadFileName="Course_Wise_Trainee_Study_Report.pdf" [openFile]="false"
+                                    zoom="100" [viewBookmark]="false" [download]="true">
+                                </ng2-pdfjs-viewer>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        
+</block-ui>

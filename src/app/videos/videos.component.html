@@ -1,0 +1,313 @@
+<block-ui>
+  <div class="card ">
+    <div class="card-header">
+      <h5><i class="fa fa-video"></i>&nbsp;VIDEO LIST</h5>
+      <button class="btn btn-info btn-sm float-right" (click)="openModal(template)"><i class="feather icon-plus"></i>
+        Add Video</button>
+
+
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <form [formGroup]="filterForm" class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                <ng-select formControlName="Class" [clearable]="false" [clearOnBackspace]="false" [items]="classList"
+                  bindLabel="ClassName_bn" bindValue="ID" placeholder="Select an class" (change)="onChangeFilterClass($event)">
+                </ng-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+               
+                    <ng-select formControlName="Subject" [ngClass]="{ 'is-invalid': submitted && f.Subject.errors }"
+                      [clearable]="false" [clearOnBackspace]="false" [items]="subjectListFilter" bindLabel="SubjectName_bn"
+                      bindValue="ID" placeholder="Select an subject" >
+                    </ng-select>
+                   
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                <input type="text" formControlName="Name" class="form-control" 
+                  placeholder="Search by video title" />
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <button type="button" class="btn btn-info  ml-2" (click)="getList()">
+                <i class="feather icon-filter"></i> Filter
+              </button>
+              <button type="button" class="btn btn-outline-danger ml-2" (click)="resetFilterList()">
+                <i class="feather icon-refresh-ccw"></i> Reset
+              </button>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-12 ">
+
+          <ngx-datatable class="material table-bordered" [rows]="rows" #dataTable [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto"
+            [limit]="10"[scrollbarH]="true">
+
+            <ngx-datatable-column [width]="80" name="Sl" prop="Id" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Class" prop="ClassName" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Subject" prop="SubjectName" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Chapter" prop="LevelName" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Video Title_bn" prop="VideoTitle_bn" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Video Title_en" prop="VideoTitle_en" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Video Length" prop="VideoLength" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+
+            <ngx-datatable-column name="Is SD Card" prop="IsSDCard" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{value === true? 'Yes':'No'}}">
+                  {{value === true? 'Yes':'No'}} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Video Path" prop="VideoPath" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+
+            <ngx-datatable-column [maxWidth]="100" name="Action" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Edit"
+                  (click)="getItem(row.ID,template)">
+                  <i class="feather icon-edit"></i>
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file-video m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+
+        <div class="form-group row">
+          <label class="col-lg-2 col-md-6 col-12 col-form-label required">Class </label>
+          <div class="col-lg-10 col-md-6 col-12">
+            <ng-select formControlName="Class" [ngClass]="{ 'is-invalid': submitted && f.Class.errors }"
+              [clearable]="false" [clearOnBackspace]="false" [items]="classList" bindLabel="ClassName_bn" bindValue="ID"
+              placeholder="Select an class" (change)="onChangeClass($event)">
+            </ng-select>
+            <div *ngIf="submitted && f.Class.errors" class="error-text">
+              <span *ngIf="f.Class.errors.required" class="text-danger"> Class is
+                required</span>
+
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-lg-2 col-md-6 col-12 col-form-label required">Subject </label>
+          <div class="col-lg-10 col-md-6 col-12">
+            <ng-select formControlName="Subject" [ngClass]="{ 'is-invalid': submitted && f.Subject.errors }"
+              [clearable]="false" [clearOnBackspace]="false" [items]="subjectList" bindLabel="SubjectName_bn"
+              bindValue="ID" placeholder="Select an subject" (change)="onChangeSubject($event)">
+            </ng-select>
+            <div *ngIf="submitted && f.Subject.errors" class="error-text">
+              <span *ngIf="f.Subject.errors.required" class="text-danger"> Subject is
+                required</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="form-group row">
+          <label class="col-lg-2 col-md-6 col-12 col-form-label required">Chapter </label>
+          <div class="col-lg-10 col-md-6 col-12">
+            <ng-select formControlName="Level" [ngClass]="{ 'is-invalid': submitted && f.Level.errors }"
+              [clearable]="false" [clearOnBackspace]="false" [items]="levelList" bindLabel="LevelName_bn" bindValue="ID"
+              placeholder="Select an chapter">
+            </ng-select>
+            <div *ngIf="submitted && f.Level.errors" class="error-text">
+              <span *ngIf="f.Level.errors.required" class="text-danger"> Chapter is
+                required</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label required ">Video Title (English) </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <textarea type="text" formControlName="English" rows="2"
+                  [ngClass]="{ 'is-invalid': submitted && f.English.errors }"
+                  placeholder="Enter video title in english." type="text" class="form-control"></textarea>
+
+                <div *ngIf="submitted && f.English.errors" class="error-text">
+                  <span *ngIf="f.English.errors.required" class="text-danger">Video Title (English) is
+                    required</span>
+                    <span *ngIf="f.English.errors.maxlength" class="text-danger">
+                      Video Title (English) must be within 250 characters</span>
+                  
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label required">Video Title (Bangla) </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <textarea type="text" formControlName="Bangla" rows="2"
+                  [ngClass]="{ 'is-invalid': submitted && f.Bangla.errors }" placeholder="Enter video title in bangla."
+                  type="text" class="form-control"></textarea>
+
+                <div *ngIf="submitted && f.Bangla.errors" class="error-text">
+                  <span *ngIf="f.Bangla.errors.required" class="text-danger">Title is
+                    required</span>
+                    <span *ngIf="f.Bangla.errors.maxlength" class="text-danger">
+                      Video Title (Bangla) must be within 250 characters</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label ">Video File </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <input class="form-control mt-2" formControlName="Video" accept="application/pdf" type="file"
+                  (change)="onVideoFileChange($event)">
+
+                <div *ngIf="submitted && f.Video.errors" class="error-text">
+                  <span *ngIf="f.Bangla.errors.required" class="text-danger">Video File is
+                    required</span>
+
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label required">Video Length </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <input type="text" formControlName="Length" placeholder="Enter video length." type="text"
+                  class="form-control" />
+
+                <div *ngIf="submitted && f.Length.errors" class="error-text">
+                  <span *ngIf="f.Length.errors.required" class="text-danger">Video Length is
+                    required</span>
+
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label ">Video Thumbnail </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <input class="form-control mt-2" formControlName="Thumbnail" accept="application/pdf" type="file"
+                  (change)="onThumbnailFileChange($event)">
+
+
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label "> </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <div class="custom-control custom-checkbox col-form-label">
+                  <input type="checkbox" class="custom-control-input" id="IsSdCard" formControlName="IsSdCard">
+                  <label class="custom-control-label" for="Active"> Is SD Card</label>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>
+        Close</button>
+
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>
+        {{btnSaveText}}</button>
+    </div>
+  </ng-template>
+
+</block-ui>

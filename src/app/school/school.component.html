@@ -1,0 +1,208 @@
+<block-ui>
+    <div class="row">
+
+        <div class="col-lg-12">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-12">
+                    <div class="card card-border-default">
+                        <div class="card-header">
+
+                            <h5><i class="fa fa-graduation-cap"></i>&nbsp; School List </h5>
+                            <button class="btn btn-info btn-sm float-right" (click)="openModal(template)"><i
+                                    class="feather icon-plus"></i> Create School</button>
+                        </div>
+                        <div class="card-block ">
+                            <div class="row">
+                                <div class="col-12">
+                                    <form [formGroup]="filterForm" class="col-12">
+                                        <div class="row">
+                                            <div class="col-lg-12 col-md-12 col-12">
+                                                <div class="form-group row">
+                                                    <label class="col-lg-1 col-12 col-form-label ">Area
+                                                    </label>
+                                                    <div class="col-lg-3 col-12">
+                                                        <ng-select formControlName="Area" [clearable]="true"
+                                                            [clearOnBackspace]="true" [items]="AreaList"
+                                                            bindLabel="Name_bn" bindValue="ID" placeholder="Select area">
+                                                        </ng-select>
+                                                    </div>
+                                                    <div class="col-lg-8 col-md-6 col-sm-6 col-12 ">
+                                                        <button type="button" class="btn btn-info  ml-2" (click)="filterList()">
+                                                          <i class="feather icon-filter"></i> Filter
+                                                        </button>
+                                                        <button type="button" class="btn btn-outline-danger  ml-2" (click)="resetFilterList()">
+                                                          <i class="feather icon-refresh-ccw"></i> Reset
+                                                        </button>
+                                                      </div>
+                                                    
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+
+                                    </form>
+                                </div>
+                            </div>
+                            <div class="row ">
+                                <div class="col-lg-12 ">
+                                    <ngx-datatable class="material table-bordered" [rows]="rows"
+                                        [loadingIndicator]="loadingIndicator" [columnMode]="ColumnMode.force"
+                                        [headerHeight]="40" [externalPaging]="true" [count]="page.totalElements"
+                                        [offset]="page.pageNumber" [limit]="page.size" (page)="setPage($event)"
+                                        [footerHeight]="50" rowHeight="auto" [scrollbarH]="true">
+
+                                        <ngx-datatable-column [width]="60" name="Sl" prop="Id" [draggable]="false"
+                                            [sortable]="false">
+                                            <ng-template let-row="row" let-rowIndex="rowIndex"
+                                                ngx-datatable-cell-template>
+                                                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+
+
+                                        <ngx-datatable-column name="Area" prop="AreaName_bn" [draggable]="false"
+                                            [sortable]="false">
+                                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                                <span title="{{ value }}"> {{ value }} </span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column name="School Name_en" prop="Name_en" [draggable]="false"
+                                            [sortable]="false">
+                                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                                <span title="{{ value }}"> {{ value }} </span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+
+                                        <ngx-datatable-column name="School Name_bn" prop="Name_bn" [draggable]="false"
+                                            [sortable]="false">
+                                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                                <span title="{{ value }}"> {{ value }} </span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+                                        <ngx-datatable-column name="Address" prop="Address" [draggable]="false"
+                                            [sortable]="false">
+                                            <ng-template let-value="value" ngx-datatable-cell-template>
+                                                <span title="{{ value }}"> {{ value }} </span>
+                                            </ng-template>
+                                        </ngx-datatable-column>
+
+
+
+                                        <ngx-datatable-column [maxWidth]="100" name="Action" [draggable]="false" [sortable]="false"
+                                        headerClass="text-center" cellClass="text-center">
+                                        <ng-template let-row="row" ngx-datatable-cell-template>
+                                          <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Edit"
+                                            (click)="getItem(row.ID,template)">
+                                            <i class="feather icon-edit"></i>
+                                          </button>
+                                        </ng-template>
+                                      </ngx-datatable-column>
+
+                                    </ngx-datatable>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <ng-template #template>
+        <div class="modal-header ">
+            <!-- <img src="assets/images/user.png" class="wid-25"> &nbsp; -->
+            <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+            <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+                <i class="feather icon-x"></i>
+            </button>
+        </div>
+        <div class="modal-body">
+            <form [formGroup]="entryForm">
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="col-form-label required">Area </label>
+                            <ng-select formControlName="Area" [ngClass]="{ 'is-invalid': submitted && f.Area.errors }"
+                                [clearable]="false" [clearOnBackspace]="false" [items]="AreaList" bindLabel="Name_bn"
+                                bindValue="ID" placeholder="Select an Area">
+                            </ng-select>
+                            <div *ngIf="submitted && f.Area.errors" class="error-text">
+                                <span *ngIf="f.Area.errors.required" class="text-danger"> Area is
+                                    required</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="col-form-label required">Name (English) </label>
+                            <input type="text" formControlName="English"
+                                [ngClass]="{ 'is-invalid': submitted && f.English.errors }" type="text"
+                                class="form-control" />
+
+                            <div *ngIf="submitted && f.English.errors" class="error-text">
+                                <span *ngIf="f.English.errors.required" class="text-danger">
+                                    School name in english is required
+                                </span>
+                                <span *ngIf="f.English.errors.maxlength" class="text-danger">
+                                    School name must be not then 250 characters
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="col-form-label required">Name (Bangla) </label>
+                            <input type="text" formControlName="Bangla"
+                                [ngClass]="{ 'is-invalid': submitted && f.Bangla.errors }" type="text"
+                                class="form-control" />
+
+                            <div *ngIf="submitted && f.Bangla.errors" class="error-text">
+                                <span *ngIf="f.Bangla.errors.required" class="text-danger">
+                                    School name in bangla is required
+                                </span>
+                                <span *ngIf="f.English.errors.maxlength" class="text-danger">
+                                    School name must be not then 250 characters
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label class="col-form-label ">Address </label>
+                            <textarea rows="3" type="text" formControlName="Address"
+                                [ngClass]="{ 'is-invalid': submitted && f.Address.errors }" type="text"
+                                class="form-control"></textarea>
+
+                            <div *ngIf="submitted && f.Address.errors" class="error-text">
+
+                                <span *ngIf="f.Address.errors.maxlength" class="text-danger">
+                                    Address must be within 250 characters
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>
+                Close</button>
+
+            <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>
+                {{btnSaveText}}</button>
+        </div>
+    </ng-template>
+
+</block-ui>

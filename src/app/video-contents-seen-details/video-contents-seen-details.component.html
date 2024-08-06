@@ -1,0 +1,92 @@
+<block-ui>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card card-border-default">
+        <div class="card-header">
+          <h5><i class="fa fa-file"></i>&nbsp;Videos Seen | {{subject}} </h5>
+
+        </div>
+
+        <div class="card-body">
+          <!-- <div class="row">
+            <div class="col-12">
+              <form [formGroup]="filterForm" class="row">
+                <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <input type="text" formControlName="name" class="form-control" (keyup)='filterDatatable($event)'
+                      placeholder="Search by name" />
+                  </div>
+                </div>
+    
+    
+              </form>
+    
+            </div>
+    
+          </div> -->
+          <div class="row">
+            <div class="col-12 ">
+
+              <ngx-datatable class="material table-bordered" [rows]="rows" #dataTable [loadingIndicator]="loadingIndicator"
+              [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto"
+              [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
+              (page)="setPage($event)" [scrollbarH]="true">
+
+                <ngx-datatable-column [maxWidth]="60" name="Sl" prop="Id" [draggable]="false" [sortable]="false">
+                  <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                    <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Video" prop="VideoTitle_bn" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                
+                    <span class="text-wrap" title="{{ value }}"> {{value}}
+                    </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Seen Duration " prop="SeenDurationSec" [width]="150" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <ng-container *ngIf="value >= 1; else videoSeenElseTemplate">
+                      <ng-container *ngIf="value / 60  < 1; else elseTemplate">
+                        Less than a minute
+                      </ng-container>
+                      <ng-template #elseTemplate>
+                        {{value / 60 | floor }} mint
+                        {{value % 60 | number:'1.0-0'}} sec
+                      </ng-template>
+                    </ng-container>
+                    <ng-template #videoSeenElseTemplate>
+                      N/A
+                    </ng-template>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Seen (Times) " prop="SeenTimes" [width]="150" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+
+               
+
+              </ngx-datatable>
+
+            </div>
+
+
+
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+
+</block-ui>

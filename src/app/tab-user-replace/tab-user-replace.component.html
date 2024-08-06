@@ -1,0 +1,198 @@
+<block-ui>
+
+
+  <div class="card ">
+    <div class="card-header">
+      <h5><i class="fa fa-copy"></i>&nbsp;Replace Tab User</h5>
+     
+
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <form [formGroup]="filterForm" class="row">
+            <div class="col-lg-1 col-md-2 col-sm-3 col-12">
+              <div class="form-group">
+                <input type="text" formControlName="name" class="form-control" 
+                  placeholder="Tab no" />
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-12 ">
+              <button type="button" class="btn btn-info  col-sm-4"
+                  (click)="filterList()">
+                  <i class="feather icon-filter"></i> Filter
+              </button>
+            
+          </div>
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-12 ">
+
+          <ngx-datatable class="material table-bordered" [rows]="rows" #dataTable [loadingIndicator]="loadingIndicator"
+          [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto"
+          [scrollbarH]="true">
+
+          <ngx-datatable-column [width]="80" name="Learner ID" prop="ApplicantCode" [draggable]="false" [sortable]="false">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <span title="{{ value }}"> {{ value }} </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="Name" [draggable]="false" [sortable]="false">
+            <ng-template let-row="row" ngx-datatable-cell-template>
+              <span class="text-wrap" title="{{row['Name']}}">
+                <img *ngIf="row['Picture'] " [src]="baseUrl+row['Picture']" class="rounded-circle" width="40"
+                  height="40"  >
+                <img *ngIf="!row['Picture']" src="assets/images/user/user-avatar-blank.png" class="rounded-circle"
+                  width="40" height="40"   >
+                <!-- <img *ngIf="!row['Picture'] && row['Gender']=='Others'"
+                        src="assets/images/user/other.jpg" alt="{{row['FirstName']}}
+                        {{row['LastName']}}" class="rounded-circle" width="40" />
+                    <img *ngIf="!row['Picture'] && row['Gender']=='Male'"
+                        src="assets/images/user/male.jpg" alt="{{row['FirstName']}}
+                        {{row['LastName']}}" class="rounded-circle" width="40" />
+                    <img *ngIf="!row['Picture'] && row['Gender']=='Female'"
+                        src="assets/images/user/female.jpg" alt="{{row['FirstName']}}
+                        {{row['LastName']}}" class="rounded-circle" width="40" /> -->
+
+              </span>
+              <a  class="text-wrap text-dark" title="{{row['Name']}}"> {{row['Name']}}
+              </a>
+              <!-- <ng-template #imgTemplate>
+                <img *ngIf="row['Picture']" [src]="baseUrl+row['Picture']" class="rounded-circle" width="100"
+                height="100"  >
+              </ng-template> -->
+            </ng-template>
+          </ngx-datatable-column>
+
+      
+          <ngx-datatable-column [width]="150" name="Gender" prop="Gender" [draggable]="false" [sortable]="false">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <span title="{{ value }}"> {{ value }} </span>
+            </ng-template>
+          </ngx-datatable-column>
+          
+          <ngx-datatable-column [width]="90" name="Class" prop="Class" [draggable]="false" [sortable]="false">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <span title="{{ value }}"> {{ value }} </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="School" prop="School" [draggable]="false" [sortable]="false">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <span title="{{ value }}"> {{ value }} </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="Reg. On" prop="CreatedOn" [draggable]="false" [sortable]="false">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <span title="{{ value }}"> {{ value  | amFromUtc | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A' }} </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+          <ngx-datatable-column [width]="200" name="Last Synced On" prop="LastSyncedDate" [draggable]="false" [sortable]="false">
+            <ng-template let-value="value" ngx-datatable-cell-template>
+              <span title="{{ value }}"> {{ value ? (value  | amFromUtc | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A') : '-' }} </span>
+            </ng-template>
+          </ngx-datatable-column>
+
+
+         
+
+
+            <ngx-datatable-column [maxWidth]="100" name="Action" prop="ID" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Select Tab User"
+                  (click)="getItem(row,template)">
+                  <i class="feather icon-check-circle"></i>
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <ng-template #template>
+    <div class="modal-header ">
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body ">
+
+      <form [formGroup]="entryForm">
+
+        <div class="row">
+          <div class="col-lg-12">
+           
+            <div class="card mb-0" >
+              <div class="card-header p-2">
+                <h5 class="card-title">Select Learners To Replace</h5>
+                <div class="custom-control custom-checkbox float-right">
+                  <input name="selectAll" id="selectAll" type="checkbox" class="custom-control-input"
+                    formControlName="selectAll" (change)="selectAll($event)">
+                  <label for="selectAll" class="custom-control-label">
+                    Select All
+                  </label>
+                </div>
+              </div>
+              <div class="card-body p-2">
+                <ul class="list-group">
+                  <li class="list-group-item d-flex justify-content-between align-items-center list-group-item-action"
+                    *ngFor="let item of learnerList  ">
+                    <div class="custom-control custom-checkbox">
+                      <input name="{{item.ID}}" id="{{item.ID}}" type="checkbox" class="custom-control-input"
+                        [(ngModel)]="item.selected" [ngModelOptions]="{standalone: true}" value="{{item.ID}}"
+                       >
+                      <label for="{{item.ID}}" class="custom-control-label">
+                        {{item.Name}}
+                      </label>
+                    </div>
+                    <p class="text-muted mb-0">{{item.CreatedOn  | amFromUtc | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}}</p>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+
+
+      </form>
+
+    </div>
+    <div class="modal-footer">
+      <div class="pr-4">
+
+        <button class="btn btn-outline-secondary mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>
+          Close</button>
+
+        <button class="btn btn-secondary" (click)="onFormSubmit(template)"><i class="feather icon-check-circle"></i>
+          {{btnSaveText}}</button>
+
+      </div>
+
+    </div>
+  </ng-template>
+</block-ui>

@@ -1,0 +1,111 @@
+.holiday-list.list-group .list-group-item strong {
+    min-width: 100px;
+}
+
+.holiday-list.list-group{
+    position: relative;
+}
+
+.scroll-container {
+    position: relative;
+}
+
+.scrollable-content{
+    padding: 16px;
+  margin: 0;
+}
+.info {
+    border-top: 3px solid #82eed7;
+}
+.head {
+    border-top: 3px solid #98e2ff;
+}
+.pending {
+    border-top: 3px solid #f4f740;
+}
+.success {
+    border-top: 3px solid #17d830;
+}
+.img-scale{
+    height: 180px;
+    width: 350px;
+}
+
+  .tile {
+    min-height: 200px;
+    background-color: #ccc;
+    background-size: cover !important;
+  }
+  
+  .header-text {
+   font-size: 30px;
+   font-weight: bolder;
+    color: #270202;
+    text-align: center;
+ 
+  }
+  .responsive {
+    width: 100%;
+    height: auto;
+    max-width: 250px;
+  }
+  .ridge {
+    border-style: ridge;
+    border-color: red;
+    border-width: 2px;
+  }
+ .text {
+  color: #000000;
+  font-size: 20px;
+}
+
+  
+body .slick-prev, 
+body .slick-next {
+  height: 45px;
+  width: 40px;
+  background: #575d59 !important;
+  z-index: 100;
+}
+
+.card .card-footer{
+  padding: 3px;
+}
+
+.a-link{
+  cursor: pointer;
+}
+
+
+// .carousel-item {
+//   margin-right: 0;
+// }
+
+// .carousel-control-prev-icon {
+//   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3e%3cpath d='M5.25 0l-4 4 4 4 1.5-1.5-2.5-2.5 2.5-2.5-1.5-1.5z'/%3e%3c/svg%3e");
+// }
+
+// .carousel-control-next-icon {
+//   background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='%23000' viewBox='0 0 8 8'%3e%3cpath d='M2.75 0l-1.5 1.5 2.5 2.5-2.5 2.5 1.5 1.5 4-4-4-4z'/%3e%3c/svg%3e");
+// }
+
+// .carousel-control-prev{
+//   justify-content: flex-start;
+//   width: 20px;
+//   // opacity: 1;
+//   padding-top: 70px;
+//   align-items: baseline;
+// }
+
+// .carousel-control-next{
+//   justify-content: flex-end;
+//   width: 20px;
+//   // opacity: 1;
+//   padding-top: 70px;
+//   align-items: baseline;
+// }
+
+// .carousel-inner {
+//   padding-left: 20px;
+//   padding-right: 20px;
+// }

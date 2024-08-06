@@ -1,0 +1,82 @@
+<block-ui>
+
+  <div class="card ">
+    <div class="card-header">
+      <h2 class="mb-0"><i class="fa fa-file"></i>&nbsp;
+        Exam Participation</h2>
+    </div>
+    <div class="card-body m-0 p-0">
+      <div  *ngFor="let item of ExamList.list; let i=index">
+        <div class="card mb-0">
+          <div class="card-header row">
+            <div class="col-md-10 col-12">
+              <h5>EXAM PARTICIPATION COUNT | {{item.SubjectName}} | {{item.ClassName}}</h5><br>
+              <span>Sorted by highest participation count</span>
+            </div>
+            <div class="col-md-2 col-12  " align-right>
+
+              <!-- <button class="btn  btn-info btn-mini ml-1 mb-1" (click)="downloadSample(item.ID)" [placement]="'top'"
+                ngbTooltip="Download Excel"  queryParamsHandling="merge">
+                <i class="feather icon-download"></i>
+              </button> -->
+              <button class="btn btn-secondary btn-mini ml-1 mb-1" [routerLink]="['/exam-participation-list', item.ID]"
+                [placement]="'top'" ngbTooltip="Show All" >
+                <i class="feather icon-eye"></i>
+              </button>
+
+            </div>
+
+
+          </div>
+          <div class="card-body ">
+              <div class="table-responsive">
+                <!-- <div class="col-lg-2 col-md-6 col-sm-6" *ngIf="ExamList.list.length < ExamList.total">
+                  <button class="btn btn-info btn-sm mt-1 btn-block" [routerLink]="['/requisition-list']"
+                    [queryParams]="{ statusPending: 'Pending' }" queryParamsHandling="merge"> Show All <i
+                      class="feather icon-arrow-right"></i>
+                  </button>
+                </div> -->
+
+                <table class="table table-sm table-hover table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th scope="col"># </th>
+                      <th scope="col">Exam</th>
+                      <th scope="col">Count </th>
+
+                    </tr>
+                  </thead>
+
+                  <tbody>
+                    <tr *ngFor="let test of item.Tests; let i=index">
+                      <!-- <tr *ngFor="let item of ExamList.list; let i=index"> -->
+
+                      <td>
+                        {{i+1}}
+                      </td>
+                      <td>
+                        <span>{{test.ExamName}} -- {{test.LevelName}}</span>
+                      </td>
+                      <td>
+                        {{test.Count}}
+                      </td>
+
+
+                    </tr>
+                  
+                   
+                  </tbody>
+
+                </table>
+
+              </div>
+          </div>
+        
+        </div>
+      </div>
+        
+    </div>
+
+  </div>
+
+</block-ui>

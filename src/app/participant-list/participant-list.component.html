@@ -1,0 +1,136 @@
+<block-ui>
+  <div class="card ">
+    <div class="card-header row">
+        <div class="col-md-10 col-12">
+            <h5><i class="fa fa-user"></i>&nbsp; PARTICIPANT LIST <span *ngIf="is_loaded">( {{ selectionTest.exam_name  }} )</span></h5>
+        </div>
+        <div class="col-md-2 col-12 text-right">
+            <button class="btn btn-secondary btn-mini float-right" [placement]="'left'" ngbTooltip="Back" (click)="backToLocation()">
+                <i class="fa fa-arrow-circle-left "></i> Back
+            </button>
+            <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Download Result" (click)="downloadResult()">
+              <i class="fa fa-arrow-circle-down"></i> Download
+            </button>
+        </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 ">
+          <ngx-datatable class="material table-bordered" [rows]="selectionQuotaList" #dataTable [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto"
+            [externalPaging]="false" [limit]="50" [scrollbarH]="true">
+
+            <ngx-datatable-column [width]="40" name="Sl" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="200" name="Name" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="text-wrap" title="{{row['name']}}">
+                  <img src="assets/images/user/user-avatar-blank.png" class="rounded-circle" width="40" height="40">
+                </a>
+                <a class="text-wrap text-dark"
+                  title="{{row['name']}}"> {{row['name']}} </a>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="80" name="Mobile" prop="mobile_number" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="220" name="Email" prop="email" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="80" name="Code" prop="user_code" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="150" name="Participation Date" prop="participation_date" [draggable]="false"
+              [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span *ngIf="value" title="{{ value }}"> {{ value | amLocal | amDateFormat: 'DD MMM, YYYY
+                  hh:mm A'}} </span>
+                <span *ngIf="!value">-</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="80" name="Achieved" prop="achieved" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="80" name="Total Marks" prop="exam_mark" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="80" name="Quota" prop="quota" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="80" name="Consumption" prop="consumption" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Details" [draggable]="false" [sortable]="false" headerClass="text-center"
+              cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Change Quota"
+                  target="_blank" (click)="chnageQuota(row, template)">
+                  <i class="fa fa-edit"></i>
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+            
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button" class="close pull-right" aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="quotaChangeForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Quota </label>
+              <input type="number" [min]="min_value" formControlName="quota" [ngClass]="{ 'is-invalid': submitted && qf.quota.errors }"
+                placeholder="Enter Quota" class="form-control" />
+              <div *ngIf="submitted && qf.quota.errors" class="error-text">
+                <span *ngIf="qf.quota.errors.required" class="text-danger"> Quota is required</span>
+                <span *ngIf="qf.quota.errors.maxlength" class="text-danger">Quota must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>

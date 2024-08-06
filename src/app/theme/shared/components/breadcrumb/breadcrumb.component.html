@@ -1,0 +1,31 @@
+<ng-container *ngIf="this.navigationList">
+  <ng-container *ngFor="let breadcrumb of navigationList; let last = last">
+    <div class="page-header" *ngIf="last && breadcrumb.breadcrumbs !== false">
+      <div class="page-block">
+        <div class="row">
+          <div class="col-md-6 col-12">
+            <div class="page-header-title">
+              <ng-container *ngFor="let breadcrumb of navigationList; let last = last">
+                <h5 class="m-b-10" *ngIf="last">{{breadcrumb.title}}</h5>
+              </ng-container>
+            </div>
+          </div>
+          <div class="col-md-6 col-12">
+            <ul class="breadcrumb float-right">
+              <li class="breadcrumb-item">
+                <a [routerLink]="['/dashboard']" *ngIf="type === 'theme2'"><i class="feather icon-home"></i></a>
+                <a [routerLink]="['/dashboard']" *ngIf="type === 'theme1'">Home</a>
+              </li>
+              <ng-container *ngFor="let breadcrumb of navigationList">
+                <li class="breadcrumb-item" *ngIf="breadcrumb.url !== false"><a
+                    [routerLink]="breadcrumb.url">{{breadcrumb.title}}</a></li>
+                <li class="breadcrumb-item" *ngIf="breadcrumb.url === false"><a
+                    href="javascript:">{{breadcrumb.title}}</a></li>
+              </ng-container>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </ng-container>
+</ng-container>

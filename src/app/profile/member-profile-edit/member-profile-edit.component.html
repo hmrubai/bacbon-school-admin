@@ -1,0 +1,88 @@
+<block-ui>
+
+  <div class="card card-border-default">
+    <div class="card-header">
+      <h5>Personal Details</h5>
+    </div>
+    <div class="card-body">
+      <form [formGroup]="editProfileForm">
+
+        <div class="row">
+          <div class="col-lg-9 col-md-8 col-12">
+            <div class="form-group row">
+              <div class="col-md-12">
+                <div class="space">
+                  <label class="required">Email: </label>
+                  <input [disabled]=true type="text" value="{{currentUser.UserName}}" class="form-control"
+                    placeholder="Enter your name">
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="space">
+                  <label class="required">First Name : </label>
+                  <input [ngClass]="{ 'is-invalid': submitted && f.firstName.errors }" formControlName="firstName" type="text"
+                    class="form-control" value="{{currentUser.FirstName}}" placeholder="Enter your first name">
+
+                  <div *ngIf="submitted && f.firstName.errors" class="error-text">
+                    <span *ngIf="f.firstName.errors.required" class="text-danger">first Name is required</span>
+                    <span *ngIf="f.firstName.errors.maxlength" class="text-danger">first Name must be not then 50
+                      characters</span>
+                  </div>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="space">
+                  <label class="required">Last Name : </label>
+                  <input [ngClass]="{ 'is-invalid': submitted && f.lastName.errors }" formControlName="lastName" type="text"
+                    class="form-control"  value="{{currentUser.LastName}}" placeholder="Enter your last name">
+
+                  <div *ngIf="submitted && f.lastName.errors" class="error-text">
+                    <span *ngIf="f.lastName.errors.required" class="text-danger">last Name is required</span>
+                    <span *ngIf="f.lastName.errors.maxlength" class="text-danger">last Name must be not then 50
+                      characters</span>
+                  </div>
+                </div>
+              </div>
+            
+           
+            </div>
+          
+           
+             <div class="form-group row">
+              <div class="col-12">
+                <button type="button" (click)="onFormSubmit()" class="btn btn-secondary">
+                  <i class="fa fa-check"></i> Update Profile
+                </button>
+              </div>
+            
+
+             
+            </div> 
+          </div>
+          <div class="col-lg-3 col-md-4 col-12">
+            <div class="card bg-light pic-upload">
+              <div class="card-header text-center">
+                <h5 class="card-title">Picture (230x230)</h5>
+              </div>
+              <div class="card-body bg-white" (click)="pictureInput.click()">
+                <img *ngIf="!imageUrl" src="https://via.placeholder.com/230x230?text=230x230">
+                <img *ngIf="imageUrl" [src]="imageUrl">
+                <input class="btn-img-upload" #pictureInput accept='image/png,image/jpeg'
+                  (change)="readURL($event, pictureInput)" type="file">
+              </div>
+              <button *ngIf="imageUrl" type="button" (click)="RemovePhoto()" class="btn btn-outline-secondary btn-sm">
+                <i class="fa fa-cancel"></i> Remove Photo
+              </button>
+            </div>
+            
+          </div>
+
+          
+        </div>
+      </form>
+    </div>
+  </div>
+
+
+
+</block-ui>

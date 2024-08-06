@@ -1,0 +1,45 @@
+<block-ui>
+  <div class="auth-wrapper">
+    <div class="auth-content text-center">
+      <h1 class="font-weight-bold mb-1" style="color: #1abc9c;"> Bacbon School Admin</h1>
+      <p class="text-muted text-center"><b>Admin Panel</b></p>
+      <div class="card borderless">
+        <div class="row align-items-center text-center">
+          <div class="col-md-12">
+            <div class="card-body">
+              <h4 class="mb-3 f-w-400"><b>Log In</b></h4>
+              <form [formGroup]="LoginForm">
+
+                <div class="mb-3">
+                  <div class="input-group">
+                    <input type="text" formControlName="Email" class="form-control"
+                      [ngClass]="{ 'is-invalid': submitted && f.Email.errors }" placeholder="Your Email">
+                  </div>
+                  <div *ngIf="submitted && f.Email.errors" class="error-text text-left">
+                    <span *ngIf="f.Email.errors.email" class="text-danger"> Not a valid email format</span>
+                    <span *ngIf="f.Email.errors.required" class="text-danger"> Email is required</span>
+                  </div>
+                </div>
+
+                <div class="mb-4">
+                  <div class="input-group">
+                    <input type="password" (keyup.enter)="focusableSubmit.click()" formControlName="Password"
+                      class="form-control" [ngClass]="{ 'is-invalid': submitted && f.Password.errors }"
+                      placeholder="Your Password">
+                  </div>
+                  <div *ngIf="submitted && f.Password.errors" class="error-text">
+                    <span *ngIf="f.Password.errors.required" class="text-danger"> Password is required</span>
+                  </div>
+                </div>
+                <button #focusableSubmit type="button" (click)="onLoginSubmit()"
+                  class="btn btn-block btn-secondary mb-4">LOG IN</button>
+                <p class="mb-0 text-muted text-left"><a [routerLink]="['/auth/forgot-password']" class="f-w-400">Forgot password?</a></p>
+              </form>
+
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</block-ui>

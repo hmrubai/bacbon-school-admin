@@ -1,0 +1,134 @@
+<block-ui>
+  <div class="card ">
+    <div class="card-header ">
+      <h2 class="mb-0"><i class="fa fa-users"></i>&nbsp;
+        TOP MOST VIDEO SEEN LEARNERS</h2>
+    </div>
+
+    <div class="card-body p-0 m-0">
+      <div class="row ">
+        <div class="col-12">
+          <form [formGroup]="filterForm">
+            <div class="form-group row">
+
+              <label class="col-lg-2 col-md-2 col-12 col-form-label text-right required m-0">Number of Learners Fetch
+              </label>
+              <div class="col-lg-6 col-md-4 col-12">
+
+                <input class="form-control " [ngClass]="{ 'is-invalid': submitted && f.limit.errors }"
+                  formControlName="limit" type="text" placeholder="Enter the number of learners you want to fetch">
+                <div *ngIf="submitted && f.limit.errors" class="error-text">
+                  <span *ngIf="f.limit.errors.required" class="text-danger">
+                    Number of learners to fetch is required
+                  </span>
+
+                </div>
+              </div>
+            </div>
+          </form>
+        </div>
+        <div class="col-12 ">
+          <div class="card ">
+            <div class="card-header p-2 font-weight-bold"> Areas
+            </div>
+            <div class="card-body">
+              <div class="row">
+                <div class="col-md-2 col-lg-2 col-12" *ngFor="let area of areaList; let i = index">
+                  <div class="custom-control custom-checkbox col-form-label">
+                    <input type="checkbox" class="custom-control-input" id="{{area.Id}}"
+                      [ngModelOptions]="{standalone: true}" [(ngModel)]="area.IsSelected">
+                    <label class="custom-control-label" for="{{area.Id}}">
+                      {{area.Name}}</label>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="card-footer text-center">
+              <button class="btn btn-info btn-sm mr-2" (click)="getList()"><i class="feather icon-search"></i>
+                Search</button>
+              <button class="btn btn-secondary btn-sm " (click)="download()"><i class="feather icon-download"></i>
+                Download Excel</button>
+
+            </div>
+          </div>
+        </div>
+        <div class="col-12 ">
+
+          <ngx-datatable class="material table-bordered" [rows]="rows" [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force" [headerHeight]="50" [footerHeight]="50" [limit]="10" rowHeight="auto">
+
+            <ngx-datatable-column [width]="60" name="Sl" prop="Id" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Learner" prop="Name" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Gender" prop="Gender" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Household ID" prop="Age" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Child ID" prop="Age" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Mobile" prop="Age" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Age" prop="Age" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Location" prop="Age" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Seen Time" prop="Age" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+
+
+          </ngx-datatable>
+
+        </div>
+      </div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+
+</block-ui>

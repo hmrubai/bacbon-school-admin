@@ -1,0 +1,143 @@
+<block-ui>
+  <div class="card ">
+    <div class="card-header row">
+      <div class="col-md-8 col-12">
+        <h5><i class="fa fa-user"></i>&nbsp; QUESTION LIST <span *ngIf="is_loaded">( {{ selectionTest.exam_name  }} )</span></h5>
+      </div>
+      <div class="col-md-4 col-12 text-right">
+        <button class="btn btn-secondary btn-mini float-right" [placement]="'left'" ngbTooltip="Back" (click)="backToLocation()">
+          <i class="fa fa-arrow-circle-left "></i> Back </button>
+        <!--<button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Upload Questions" (click)="openModal(template)">
+          <i class="fa fa-arrow-circle-up"></i> Upload Questions</button>-->
+        <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Add New Question" (click)="openAddQuestionModal(questionAddTemplate)">
+          <i class="fa fa-plus"></i> Add New Question</button>
+      </div>
+    </div>
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 ">
+          <ngx-datatable class="material table-bordered" [rows]="questionList" #dataTable [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto"
+            [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
+            (page)="setPage($event)" [scrollbarH]="true">
+
+            <ngx-datatable-column name="Sl" [width]="250" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="250" name="Question" prop="question" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                {{ value }}
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="250" name="Details" [draggable]="false" [sortable]="false" headerClass="text-center"
+              cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Change" (click)="editQuestion(row, questionTemplate)">
+                  <i class="fa fa-edit"></i>
+                </a>
+                <a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="Delete" (click)="deleteQuestion(row)">
+                  <i class="fa fa-trash"></i>
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+        </div>
+      </div>
+    </div>
+  </div>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+        <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+            <i class="feather icon-x"></i>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <app-card>
+            <div class="row">
+                <div class="col-sm-12" >
+                    <h5 class="btn btn-success btn-sm float-right download-btn"><a href="/assets/sample_file/Grading_Policy.xlsx" download><i class="fa fa-arrow-circle-down"></i> Download Sample File </a> </h5>
+                    <div class="form-group">
+                        <label class="col-form-label required"> Select File </label>
+                        <input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    </div>
+                </div>
+            </div>
+        </app-card>
+    </div>
+    <div class="modal-footer">
+        <div class="pr-4">
+            <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+            <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+        </div>
+    </div>
+</ng-template>
+
+<ng-template #questionTemplate>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="questionForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Question </label>
+              <input type="text" formControlName="question" [ngClass]="{ 'is-invalid': submitted && f.question.errors }"
+                placeholder="Enter Question" type="text" class="form-control" />
+              <div *ngIf="submitted && f.question.errors" class="error-text">
+                <span *ngIf="f.question.errors.required" class="text-danger"> Question is required</span>
+                <span *ngIf="f.question.errors.maxlength" class="text-danger">Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onUpdateQuestionFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>
+
+  <ng-template #questionAddTemplate>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="questionForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Question </label>
+              <input type="text" formControlName="question" [ngClass]="{ 'is-invalid': submitted && f.question.errors }"
+                placeholder="Enter Question" type="text" class="form-control" />
+              <div *ngIf="submitted && f.question.errors" class="error-text">
+                <span *ngIf="f.question.errors.required" class="text-danger"> Question is required</span>
+                <span *ngIf="f.question.errors.maxlength" class="text-danger">Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onAddQuestionFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>

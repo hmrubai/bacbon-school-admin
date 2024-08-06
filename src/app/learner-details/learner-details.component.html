@@ -1,0 +1,569 @@
+<block-ui>
+  <div class="col-12">
+    <div class="card ">
+      <div class="card-header">
+        <div class="row">
+          <div class="col-6">
+            <h2 class="mb-0"><i class="fa fa-user-circle"></i>&nbsp;
+              Learner's Detail</h2>
+          </div>
+          <div class="col-6 text-right">
+            <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Go Back"
+              [routerLink]="['/learner-list']">
+              <i class="feather icon-arrow-left"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="card-body">
+        <div class="row">
+          <div class="col-12 ">
+            <div class="row">
+              <div class="col-6">
+                <h3 class="mb-0"><i class="far fa-clone pr-1"></i>General Information</h3>
+              </div>
+              <div class="col-6 text-right">
+                <button class="btn btn-success btn-mini" [placement]="'left'" ngbTooltip="Refresh"
+                  (click)="refreshComponent()">
+                  <i class="feather icon-refresh-cw"></i> Refresh
+                </button>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-6 col-12 table-responsive-md">
+                <table class="table table-sm table-bordered">
+                  <tbody>
+                    <tr>
+                      <td rowspan="7" width="230">
+                        <img [src]="baseUrl+Learner.Picture" style="max-width: 200px;" />
+                      </td>
+                    </tr>
+
+                    <tr>
+                      <th width="30%">Name </th>
+                      <td width="2%">:</td>
+                      <td class="text-wrap">{{Learner.Name}}</td>
+                    </tr>
+                    <tr>
+                      <th width="30%">Age </th>
+                      <td width="2%">:</td>
+                      <td>{{Learner.Age}}</td>
+                    </tr>
+                    <tr>
+                      <th width="30%">Gender </th>
+                      <td width="2%">:</td>
+                      <td>{{Learner.Gender}}</td>
+                    </tr>
+                    <tr>
+                      <th width="30%">Class </th>
+                      <td width="2%">:</td>
+                      <td class="text-wrap">{{Learner.ClassName}}</td>
+                    </tr>
+                    <tr>
+                      <th width="30%">School </th>
+                      <td width="2%">:</td>
+                      <td class="text-wrap">{{Learner.School}}</td>
+                    </tr>
+                    <tr>
+                      <th width="30%">Area</th>
+                      <td width="2%">:</td>
+                      <td class="text-wrap">{{Learner.Area}}</td>
+                    </tr>
+
+                  </tbody>
+                </table>
+              </div>
+              <div class="col-lg-6 col-12 table-responsive-md">
+                <table class="table table-sm table-bordered">
+                  <tr>
+                    <th width="30%">TAB No </th>
+                    <td width="2%">:</td>
+                    <td>{{Learner.DeviceNo}}
+                      <span *ngIf="Learner.DeviceNo" class="badge badge-warning ml-2 cursor-pointer" [placement]="'top'"
+                        ngbTooltip="Device Info" (click)="ShowDeviceDetails(deviceTemplate)">
+                        <i class="fa fa-info"></i>
+                      </span>
+                    </td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Contact Number </th>
+                    <td width="2%">:</td>
+                    <td>{{Learner.MobileNo}}</td>
+                  </tr>
+
+                  <tr>
+                    <th width="30%">App Registration Date </th>
+                    <td width="2%">:</td>
+                    <td>{{Learner.CreatedOn | amFromUtc | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Last Synced Date</th>
+                    <td width="2%">:</td>
+                    <td>{{Learner.LastSyncedDate?(Learner.LastSyncedDate | amFromUtc | amLocal | amDateFormat: 'DD MMM,
+                      YYYY hh:mm A') : "-" }}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Spent Time on Video</th>
+                    <td width="2%">:</td>
+                    <td>{{Learner.VideoSpentDuration}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Spent Time on App</th>
+                    <td width="2%">:</td>
+                    <td>{{Learner.AppSpentDuration}}</td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card card-border-default">
+      <div class="card-body pt-2 pb-2">
+        <form class="col-lg-4 offset-lg-4 col-12">
+          <div class="form-group row mb-0">
+            <label class="col-lg-3 col-md-4 col-12 col-form-label required">Class </label>
+            <div class="col-lg-9 col-md-8 col-12">
+              <ng-select [(ngModel)]="classId" [ngModelOptions]="{standalone: true}" [clearable]="false"
+                [clearOnBackspace]="false" [items]="classList" bindLabel="ClassName_en" bindValue="ID"
+                placeholder="Loading.." (change)="onChangeClass($event)">
+              </ng-select>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+    
+    <div class="row">
+
+      <div class="col-lg-4 col-md-6 col-12">
+        <app-card [hidHeader]="true" [isCardFooter]="true" footerClass="bg-c-red">
+          <div class="row align-items-center">
+            <div class="col-lg-8 col-md-8 col-12">
+              <h2 class="text-c-red"><strong><b>{{TotalVideoSpentTime}}</b></strong></h2>
+              <h4 class="text-uppercase mb-0" style="color: gray;"><strong><b>Total Spent Hours on
+                    Videos</b></strong></h4>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12 text-right">
+              <img src="assets/images/multimedia.png" class="wid-60">
+            </div>
+          </div>
+
+        </app-card>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12">
+        <app-card [hidHeader]="true" [isCardFooter]="true" footerClass="bg-c-yellow">
+          <div class="row align-items-center">
+            <div class="col-lg-8 col-md-8 col-12">
+              <h2 class="text-c-yellow"><strong><b>{{TotalScriptTime}}</b></strong></h2>
+              <h4 class="text-uppercase mb-0" style="color: gray;"><strong><b>Total Spent Hours on
+                    Scripts</b></strong></h4>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12 text-right">
+              <img src="assets/images/document.png" class="wid-60">
+            </div>
+          </div>
+
+        </app-card>
+      </div>
+      <div class="col-lg-4 col-md-6 col-12">
+        <app-card [hidHeader]="true" [isCardFooter]="true" footerClass="bg-c-blue">
+          <div class="row align-items-center">
+            <div class="col-lg-8 col-md-8 col-12">
+              <h2 class="text-c-blue"><strong><b>{{TotalExamSpentTime}}</b></strong></h2>
+              <h4 class="text-uppercase mb-0" style="color: gray;"><strong><b>Total Spent Hours on
+                    Tests</b></strong></h4>
+            </div>
+            <div class="col-lg-4 col-md-4 col-12 text-right">
+              <img src="assets/images/exam.png" class="wid-60">
+            </div>
+          </div>
+          <div class="app-card-footer">
+            <div class="row align-items-center">
+              <div class="col-9">
+
+              </div>
+              <div class="col-3 text-right">
+
+              </div>
+            </div>
+          </div>
+        </app-card>
+      </div>
+    </div>
+    <!-- Video -->
+    <div class="card card-border-default">
+      <div class="card-header p-0">
+        <div class="alert alert-info p-2 m-0 cursor-pointer" (click)="videoCollapsed = !videoCollapsed"
+          [attr.aria-expanded]="!videoCollapsed" aria-controls="collapseVideo">
+          <button class="btn btn-icon btn-mini"
+            [ngClass]="{'btn-success': videoCollapsed, 'btn-danger': !videoCollapsed }">
+            <i class="feather" [ngClass]="{'icon-plus': videoCollapsed, 'icon-minus': !videoCollapsed }"></i>
+          </button> Video Seen Progress
+        </div>
+        <!-- <h5><i class="fa fa-video"></i> Videos Completed</h5> -->
+      </div>
+      <div class="card-body p-0 pb-2" id="collapseVideo" [collapse]="videoCollapsed" [isAnimated]="true">
+        <div class="row ">
+          <div class="col-md-6 col-lg-6 col-12 " *ngFor="let subject of subjects">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-md-10 col-12">
+                    <h5><b>VIDEO COMPLETED | {{subject.Name}}</b></h5>
+                  </div>
+                  <div class="col-md-2 col-12 text-right ">
+
+                    <button class="btn  btn-info btn-mini" [routerLink]="['/employee-entry']" [placement]="'top'"
+                      ngbTooltip="Download Excel" [queryParams]="{ id: 1}" queryParamsHandling="merge">
+                      <i class="feather icon-download"></i>
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row scroll">
+                  <div class="table-responsive">
+                    <table class="table table-sm table-hover table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col"># </th>
+                          <th scope="col">Video Title</th>
+                          <th scope="col" class="text-wrap" style="width: 10%">Watched Duration</th>
+                          <th scope="col" class="text-wrap" style="width: 10%">Seen (Times)</th>
+                          <th scope="col" class="text-wrap" style="width: 10%">Completed</th>
+
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr *ngFor="let video of subject.Videos let i = index">
+                          <td>
+                            {{i+1}}
+                          </td>
+                          <td>
+                            <span>{{video.Name}}</span>
+                          </td>
+                          <td>
+                            <ng-container *ngIf="video.SeenDurationSec >= 1; else videoSeenElseTemplate">
+                              <ng-container *ngIf="video.SeenDurationSec / 60  < 1; else elseTemplate">
+                                Less than a minute
+                              </ng-container>
+                              <ng-template #elseTemplate>
+                                {{video.SeenDurationSec / 60 | floor }} mint
+                                {{video.SeenDurationSec % 60 | number:'1.0-0'}} sec
+                              </ng-template>
+                            </ng-container>
+                            <ng-template #videoSeenElseTemplate>
+                              N/A
+                            </ng-template>
+                          </td>
+                          <td class="text-right">{{video.SeenTimes}}</td>
+                          <td class="text-center">
+                            <i *ngIf="video.Completed" class="fa fa-check-square text-success"></i>
+                            <i *ngIf="!video.Completed" class="fa fa-window-close text-danger"></i>
+                          </td>
+                        </tr>
+                      </tbody>
+
+                    </table>
+                  </div>
+
+                </div>
+
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Script -->
+    <div class="card card-border-default">
+      <div class="card-header p-0">
+        <div class="alert alert-success p-2 m-0 cursor-pointer" (click)="scriptCollapsed = !scriptCollapsed"
+          [attr.aria-expanded]="!scriptCollapsed" aria-controls="collapseScript">
+          <button class="btn btn-icon btn-mini"
+            [ngClass]="{'btn-success': scriptCollapsed, 'btn-danger': !scriptCollapsed }">
+            <i class="feather" [ngClass]="{'icon-plus': scriptCollapsed, 'icon-minus': !scriptCollapsed }"></i>
+          </button> Script Progress
+        </div>
+        <!-- <h5><i class="fa fa-video"></i> </h5> -->
+      </div>
+      <div class="card-body" id="collapseScript" [collapse]="scriptCollapsed" [isAnimated]="true">
+        <div class="row ">
+          <ng-container *ngFor="let subject of subjects">
+            <div class="col-md-6 col-lg-6 col-12" *ngIf="subject.Scripts.length > 0">
+              <div class="card">
+                <div class="card-header">
+                  <div class="row">
+                    <div class="col-md-10 col-12">
+                      <h5><b>Scripts | {{subject.Name}}</b></h5>
+                    </div>
+                    <div class="col-md-2 col-12 text-right ">
+
+                      <button class="btn  btn-info btn-mini " [routerLink]="['/employee-entry']" [placement]="'top'"
+                        ngbTooltip="Download Excel" [queryParams]="{ id: 1}" queryParamsHandling="merge">
+                        <i class="feather icon-download"></i>
+                      </button>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="card-body">
+                  <div class="row scroll">
+                    <div class="table-responsive">
+                      <table class="table table-sm table-hover table-bordered table-striped">
+                        <thead>
+                          <tr>
+                            <th scope="col"># </th>
+                            <th scope="col">Script Title</th>
+                            <th scope="col" class="text-wrap" style="width: 10%">Spent Duration</th>
+                            <th scope="col" class="text-wrap" style="width: 10%">Seen (Times)</th>
+                          </tr>
+                        </thead>
+
+                        <tbody>
+                          <tr *ngFor="let script of subject.Scripts let i = index">
+                            <td>
+                              {{i+1}}
+                            </td>
+                            <td>
+                              <span>{{script.Name}}</span>
+                            </td>
+                            <td>
+                              <ng-container *ngIf="script.SeenDurationSec >= 1; else scriptSeenElseTemplate">
+                                <ng-container *ngIf="script.SeenDurationSec / 60  < 1; else elseTemplate">
+                                  Less than a minute
+                                </ng-container>
+                                <ng-template #elseTemplate>
+                                  {{script.SeenDurationSec / 60 | floor }} mint
+                                  {{script.SeenDurationSec % 60 | number:'1.0-0'}} sec
+                                </ng-template>
+                              </ng-container>
+                              <ng-template #scriptSeenElseTemplate>
+                                N/A
+                              </ng-template>
+                            </td>
+                            <td class="text-right">{{script.SeenTimes}}</td>
+                          </tr>
+                        </tbody>
+
+                      </table>
+                    </div>
+
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </ng-container>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Small Test -->
+    <div class="card card-border-default">
+      <div class="card-header p-0">
+        <div class="alert alert-success p-2 m-0 cursor-pointer" (click)="smallTestCollapsed = !smallTestCollapsed"
+          [attr.aria-expanded]="!smallTestCollapsed" aria-controls="collapseSmallTest">
+          <button class="btn btn-icon btn-mini"
+            [ngClass]="{'btn-success': smallTestCollapsed, 'btn-danger': !smallTestCollapsed }">
+            <i class="feather" [ngClass]="{'icon-plus': smallTestCollapsed, 'icon-minus': !smallTestCollapsed }"></i>
+          </button> Test Progress
+        </div>
+        <!-- <h5><i class="fa fa-file"></i> Test History </h5> -->
+      </div>
+      <div class="card-body p-0 pb-2" id="collapseSmallTest" [collapse]="smallTestCollapsed" [isAnimated]="true">
+        <div class="row ">
+          <div class="col-md-6 col-lg-6 col-12 " *ngFor="let subject of subjects">
+            <div class="card">
+              <div class="card-header">
+                <div class="row">
+                  <div class="col-md-10 col-12">
+                    <h5><b>TEST PARTICIPATION | {{subject.Name}}</b></h5>
+                  </div>
+                  <div class="col-md-2 col-12  text-right">
+
+                    <button class="btn  btn-info btn-mini " [routerLink]="['/employee-entry']" [placement]="'top'"
+                      ngbTooltip="Download Excel" [queryParams]="{ id: 1}" queryParamsHandling="merge">
+                      <i class="feather icon-download"></i>
+                    </button>
+
+                  </div>
+                </div>
+              </div>
+              <div class="card-body">
+                <div class="row scroll">
+                  <div class="table-responsive">
+                    <table class="table table-sm table-hover table-bordered table-striped">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 10%"># </th>
+                          <th scope="col">Test</th>
+                          <th scope="col" style="width: 10%">Compelted</th>
+                          <th scope="col" class="text-wrap" style="width: 10%">Participation (Times)</th>
+                          <th scope="col" class="text-wrap" style="width: 10%">Details</th>
+                        </tr>
+                      </thead>
+
+                      <tbody>
+                        <tr *ngFor="let test of subject.SmallTests; let i = index">
+                          <td>
+                            {{i+1}}
+                          </td>
+
+                          <td>
+                            <span>{{test.Name}}</span>
+                          </td>
+
+                          <td class="text-center" style="width: 10%">
+                            <i *ngIf="test.Completed" class="fa fa-check-square text-success"></i>
+                            <i *ngIf="!test.Completed" class="fa fa-window-close text-danger"></i>
+                          </td>
+                          <td class="text-wrap" style="width: 10%">
+                            {{test.Participation}}
+                          </td>
+                          <td class="text-wrap" style="width: 10%">
+                            <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'"
+                              *ngIf="test.Participation>0" ngbTooltip="Show Result"
+                              [routerLink]="['/test-result-list',test.ID,Learner.ID]">
+                              <i class="fa fa-info"></i>
+                            </button>
+                            <span *ngIf="test.Participation<=0">N/A</span>
+                          </td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Graph -->
+    <div class="card card-border-default mb-0">
+      <div class="card-header p-0">
+        <div class="alert alert-warning p-2 m-0 cursor-pointer" (click)="graphCollapsed = !graphCollapsed"
+          [attr.aria-expanded]="!graphCollapsed" aria-controls="collapseGraph">
+          <button class="btn btn-icon btn-mini"
+            [ngClass]="{'btn-success': graphCollapsed, 'btn-danger': !graphCollapsed }">
+            <i class="feather" [ngClass]="{'icon-plus': graphCollapsed, 'icon-minus': !graphCollapsed }"></i>
+          </button> Video Seen Progress in Graph
+        </div>
+      </div>
+      <div class="card-body p-0 pb-2" id="collapseGraph" [collapse]="graphCollapsed" [isAnimated]="true">
+        <div class="row ">
+          <div class="col-12 mb-3" *ngFor="let subject of subjects">
+            <highcharts-chart *ngIf="subject.ChartOptions" [Highcharts]="highcharts" [options]="subject.ChartOptions"
+              style="width: 100%; height: 260px; display: block;">
+            </highcharts-chart>
+            <hr />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+  <ng-template #deviceTemplate>
+    <div class="modal-header ">
+      <h4 class="modal-title pull-left"><i class="fa fa-tablet  pr-1"></i>Device Information</h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+
+      <div class="row">
+        <div class="col-12 ">
+
+          <div class="row">
+            <div class="col-lg-12 col-12 table-responsive-md">
+              <table class="table table-sm table-bordered mb-0">
+                <tbody>
+
+                  <tr>
+                    <th width="30%">TAB No </th>
+                    <td width="2%">:</td>
+                    <td class="text-wrap">{{DeviceDetail.DeviceNo}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Code </th>
+                    <td width="2%">:</td>
+                    <td class="text-wrap">{{DeviceDetail.Code}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Material Number </th>
+                    <td width="2%">:</td>
+                    <td class="text-wrap">{{DeviceDetail.MaterialNumber}}</td>
+                  </tr>
+                  <tr>
+                    <th width="30%">Material Description </th>
+                    <td width="2%">:</td>
+                    <td class="text-wrap">{{DeviceDetail.MaterialDescription}}</td>
+                  </tr>
+
+                  <tr>
+                    <th width="30%">IMEI</th>
+                    <td width="2%">:</td>
+                    <td class="text-wrap">{{DeviceDetail.IMEI}}</td>
+                  </tr>
+
+                  <tr>
+                    <th width="30%">Mobile</th>
+                    <td width="2%">:</td>
+                    <td class="text-wrap">{{DeviceDetail.MobileNo}}</td>
+                  </tr>
+
+                  <!-- <tr>
+                      <th width="30%">Area</th>
+                      <td width="2%">:</td>
+                      <td class="text-wrap">{{DeviceDetail.Area}}</td>
+                    </tr>
+
+                    <tr>
+                      <th width="30%">School</th>
+                      <td width="2%">:</td>
+                      <td class="text-wrap">{{DeviceDetail.School}}</td>
+                    </tr> -->
+
+                  <!-- <tr>
+                      <th width="30%">Entry On</th>
+                      <td width="2%">:</td>
+                      <td>{{DeviceDetail.EntryOn | amFromUtc | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}}</td>
+                    </tr>
+                     -->
+
+
+                </tbody>
+              </table>
+            </div>
+
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+    <div class="modal-footer text-center">
+      <button class="btn btn-danger btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>
+        Close</button>
+
+    </div>
+  </ng-template>
+</block-ui>

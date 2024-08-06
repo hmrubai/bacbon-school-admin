@@ -1,0 +1,159 @@
+<block-ui>
+  <div class="row">
+    <div class="col-lg-12">
+      <div class="row">
+        <div class="col-sm-12">
+
+                  <form [formGroup]="entryForm">
+                    <div class="row ">
+
+                      <div class="col-lg-12 ">
+                        <div class="card table-1-card mb-0">
+                          <div class="card-header">
+                            <img src="assets/images/settings.png" class="wid-25">&nbsp;
+                            <h5>System Configuration</h5>
+                          </div>
+                          <div class="card-block">
+                            <div class="row">
+
+                              <input type="hidden" formControlName="id">
+
+                              <div class="col-lg-6">
+
+                                <div class="form-group row">
+                                  <label class="col-sm-4 col-form-label required"><i class="feather icon-check grey"></i> Company Info </label>
+                                  <div class="col-sm-8">
+                                    <input type="text" formControlName="name"
+                                      [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                                      placeholder="Enter Company name" class="form-control">
+                                    <div *ngIf="submitted && f.name.errors" class="error-text">
+                                      <span *ngIf="f.name.errors.required" class="text-danger"> Company name is
+                                        required</span>
+                                      <span *ngIf="f.name.errors.maxlength" class="text-danger"> Company name must be
+                                        within
+                                        250 charecters</span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="form-group row">
+                                  <label class="col-sm-4 col-form-label required"><i class="feather icon-mail grey"></i> Company Email </label>
+                                  <div class="col-sm-8">
+                                    <input type="email" formControlName="email"
+                                      [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
+                                      placeholder="Enter Company email" class="form-control">
+                                    <div *ngIf="submitted && f.email.errors" class="error-text">
+                                      <span *ngIf="f.email.errors.required" class="text-danger"> Company email is
+                                        required</span>
+                                      <span *ngIf="f.email.errors.email" class="text-danger">Email must be a valid email
+                                        address</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <div class="form-group row">
+                                  <label class="col-sm-4 col-form-label required"><i class="feather icon-phone grey"></i> Contact No </label>
+                                  <div class="col-sm-8">
+                                    <input type="text" formControlName="phone"
+                                      [ngClass]="{ 'is-invalid': submitted && f.phone.errors }"
+                                      placeholder="Enter Company phone number" class="form-control">
+
+                                    <div *ngIf="submitted && f.phone.errors" class="error-text">
+                                      <span *ngIf="f.phone.errors.required" class="text-danger"> Company phone no. is
+                                        required</span>
+                                      <span *ngIf="f.phone.errors.maxlength" class="text-danger"> Company phone no. must
+                                        be
+                                        within
+                                        250 characters</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- <div class="form-group row">
+                                          <label class="col-sm-4 col-form-label required">Fiscal Year's Start Month</label>
+                                          <div class="col-sm-8">
+                                            <input type="text" readonly class="form-control"
+                                                  formControlName="startMonth"
+                                                  [ngClass]="{ 'is-invalid': submitted && f.startMonth.errors }"  (bsValueChange)="OnMonthChange()"
+                                                  [bsConfig]="{ minMode:'month', adaptivePosition: true, dateInputFormat: 'MMMM' }"   [placement]="'right'" bsDatepicker placeholder="Enter Company start month."
+                                                  >
+                                                  <small class="form-text text-muted text-danger" *ngIf="IsChanged">
+                                                    When you change start month, All the upcoming fiscal year's start month is going to be calculated from this updated month and this process is irreversible.
+                                                  </small>
+                                            <div *ngIf="submitted && f.startMonth.errors" class="error-text">
+                                              <span *ngIf="f.startMonth.errors.required" class="text-danger">Company Start Month is
+                                                required</span>
+                                            </div>
+                                          </div>
+                                        </div> -->
+
+                                <div class="form-group row">
+                                  <label class="col-lg-4 col-12 col-form-label required"><i class="feather icon-image grey"></i> Logo (325x65) </label>
+                                  <div class="col-lg-8 col-12">
+                                    <img *ngIf="!logoURL" style="max-width: 325px"
+                                      src="https://via.placeholder.com/325x65?text=No+Image" height="65">
+                                    <img *ngIf="logoURL" style="max-width: 325px" [src]="logoURL" height="65">
+
+                                    <input class="w-100 mt-2" #logo type="file" formControlName="logo"
+                                      accept='image/png,image/jpeg' (change)="preview(logo.files)" />
+                                  </div>
+                                </div>
+
+                              </div>
+
+
+                              <div class="col-lg-6">
+
+
+                                <div class="form-group row">
+                                  <label class="col-sm-4 col-form-label"><i class="feather icon-cloud grey"></i> Company Website </label>
+                                  <div class="col-sm-8">
+                                    <input type="text" formControlName="website" placeholder="Enter company website url"
+                                      [ngClass]="{ 'is-invalid': submitted && f.website.errors }" class="form-control">
+                                    <div *ngIf="submitted && f.website.errors" class="error-text">
+                                      <span *ngIf="f.website.errors.maxlength" class="text-danger">Company website must
+                                        be
+                                        within
+                                        250 charecters</span>
+                                    </div>
+                                  </div>
+                                </div>
+
+                                <div class="form-group row">
+                                  <label class="col-sm-4 col-form-label"><i class="feather icon-home grey"></i> Address </label>
+                                  <div class="col-sm-8">
+                                    <textarea type="text" formControlName="address" placeholder="Enter Company address"
+                                      rows="4" class="form-control"
+                                      [ngClass]="{ 'is-invalid': submitted && f.address.errors }"> </textarea>
+                                    <div *ngIf="submitted && f.address.errors" class="error-text">
+                                      <span *ngIf="f.address.errors.maxlength" class="text-danger"> Company address must
+                                        be
+                                        within
+                                        250 characters</span>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+
+
+                            </div>
+
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-12 mt-2 text-center">
+                        <button class="btn btn-secondary wid-150" (click)="onFormSubmit()"><i
+                            class="feather icon-save"></i>
+                          {{btnSaveText}}</button>
+                      </div>
+                    </div>
+                  </form>
+          
+           
+        </div>
+      </div>
+    </div>
+
+
+  </div>
+</block-ui>

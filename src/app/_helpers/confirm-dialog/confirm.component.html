@@ -1,0 +1,30 @@
+<div class="card p-0 mb-0">
+    <div class="card-header">
+        <h5 class="card-title">{{title}}</h5>
+    </div>
+    <div class="card-body" [innerHTML]="message"></div>
+    <div class="card-footer text-center">
+        <button matDialogClose mat-button class="btn btn-danger btn-sm mr-2" *ngIf="!disableCloseButton"
+            (click)="dialogRef.close(false) ">
+            <i class="feather icon-x"></i> Cancel
+        </button>
+        <button mat-button class="btn btn-success btn-sm" (click)="dialogRef.close(true)">
+            <i class="feather icon-check"></i> {{confirmButtonText}}
+        </button>
+    </div>
+</div>
+<!-- <h1 matDialogTitle>
+
+    {{title}}</h1>
+<div matDialogContent [innerHTML]="message"></div>
+<div matDialogActions fxLayoutAlign="space-around center">
+
+    <button matDialogClose mat-button class="btn btn-danger btn-sm mr-2" *ngIf="!disableCloseButton"
+        (click)="dialogRef.close(false) ">
+       <i class="icofont-close"></i> Cancel
+    </button>
+    <button mat-button class="btn btn-success btn-sm"
+        (click)="dialogRef.close(true)">
+        <i class="icofont-tick-mark"></i> {{confirmButtonText}}
+    </button>
+</div> -->

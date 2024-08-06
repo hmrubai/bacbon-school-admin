@@ -1,0 +1,333 @@
+<block-ui>
+
+  <div class="card ">
+    <div class="card-header">
+      <h5><i class="fa fa-file"></i>&nbsp;SMALL TEST QUESTION ANSWER LIST</h5>
+      <button class="btn btn-info  float-right" (click)="openModal(template)"><i class="feather icon-plus"></i>
+        Add Small Test QA</button>
+
+      <button class="btn btn-primary  float-right mr-2" (click)="openBulkUploadModal(templateQA)"><i
+          class="feather icon-upload"></i>
+        Bulk Upload QA</button>
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+
+          <form [formGroup]="filterForm" class="row">
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                <ng-select formControlName="Test" [clearable]="false" [clearOnBackspace]="false" [items]="testList"
+                  bindLabel="SmallTestName_bn" bindValue="ID" placeholder="Select an small test">
+                </ng-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                <input type="text" formControlName="Name" class="form-control" placeholder="Search by question" />
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+              <button type="button" class="btn btn-info ml-2" (click)="getList()">
+                <i class="feather icon-filter"></i> Filter
+              </button>
+              <button type="button" class="btn btn-outline-danger ml-2" (click)="resetFilterList()">
+                <i class="feather icon-refresh-ccw"></i> Reset
+              </button>
+            </div>
+          </form>
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-12 ">
+
+          <ngx-datatable class="material table-bordered" [rows]="rows" #dataTable [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto" [limit]="10"
+            [scrollbarH]="true">
+
+            <ngx-datatable-column [width]="60" name="Sl" prop="Id" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Small Test En Name" prop="SmallTestEnName" [draggable]="false"
+              [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Question_en" prop="Question_en" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Question_bn" prop="Question_bn" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Correct Answer" prop="CorrectAnswer" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <!-- <ngx-datatable-column name="Audio Path" prop="AudioPath" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column> -->
+
+
+
+            <ngx-datatable-column [maxWidth]="100" name="Action" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Edit"
+                  (click)="getItem(row.ID, template)">
+                  <i class="feather icon-edit"></i>
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+  </div>
+
+  <ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+
+        <div class="form-group row">
+          <label class="col-lg-2 col-md-6 col-12 col-form-label required">Small Test </label>
+          <div class="col-lg-10 col-md-6 col-12">
+            <ng-select formControlName="Test" [ngClass]="{ 'is-invalid': submitted && f.Test.errors }"
+              [clearable]="false" [clearOnBackspace]="false" [items]="testList" bindLabel="SmallTestName_bn"
+              bindValue="ID" placeholder="Select a test" [(ngModel)]="selectedTest">
+            </ng-select>
+            <div *ngIf="submitted && f.Test.errors" class="error-text">
+              <span *ngIf="f.Test.errors.required" class="text-danger"> Small test is
+                required</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label required">Question (English) </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <textarea rows="3" type="text" formControlName="English"
+                  [ngClass]="{ 'is-invalid': submitted && f.English.errors }" placeholder="Enter question in english."
+                  type="text" class="form-control">
+                </textarea>
+
+                <div *ngIf="submitted && f.English.errors" class="error-text">
+                  <span *ngIf="f.English.errors.required" class="text-danger">Question(English) is
+                    required</span>
+                  <span *ngIf="f.English.errors.maxlength" class="text-danger">Question(English) can not be more
+                    than
+                    250 characters</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label required">Question (Bangla) </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <textarea rows="3" type="text" formControlName="Bangla"
+                  [ngClass]="{ 'is-invalid': submitted && f.Bangla.errors }" placeholder="Enter question in bangla."
+                  type="text" class="form-control">
+                </textarea>
+
+                <div *ngIf="submitted && f.Bangla.errors" class="error-text">
+                  <span *ngIf="f.Bangla.errors.required" class="text-danger">Question(Bangla) is
+                    required</span>
+                  <span *ngIf="f.Bangla.errors.maxlength" class="text-danger">Question(Bangla) can not be more
+                    then
+                    250 characters</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label ">Option 1</label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <textarea rows="2" type="text" formControlName="Option1" placeholder="Enter option 1." type="text"
+                  class="form-control"></textarea>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label ">Option 2</label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <textarea rows="2" type="text" formControlName="Option2" placeholder="Enter option 2." type="text"
+                  class="form-control"></textarea>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label ">Option 3</label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <textarea rows="2" type="text" formControlName="Option3" placeholder="Enter option 3." type="text"
+                  class="form-control"></textarea>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label ">Option 4</label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <textarea rows="2" type="text" formControlName="Option4" placeholder="Enter option 4." type="text"
+                  class="form-control"></textarea>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+        <div class="form-group row">
+          <label class="col-lg-2 col-md-6 col-12 col-form-label ">Correct Answer</label>
+          <div class="col-lg-10 col-md-6 col-12">
+            <textarea rows="2" formControlName="Correct" placeholder="Enter correct answer." type="text"
+              class="form-control"></textarea>
+
+          </div>
+        </div>
+
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label ">Question Type </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <ng-select formControlName="Type" [ngClass]="{ 'is-invalid': submitted && f.Type.errors }"
+                  [clearable]="false" [clearOnBackspace]="false" [items]="qsnTypeList" bindLabel="Name" bindValue="Name"
+                  placeholder="Select a question type">
+                </ng-select>
+
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group row">
+              <label class="col-lg-4 col-md-6 col-12 col-form-label ">Audio File </label>
+              <div class="col-lg-8 col-md-6 col-12">
+                <input class="form-control mt-2" formControlName="File" accept="application/pdf" type="file"
+                  (change)="onFileChange($event)">
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+
+
+
+
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>
+        Close</button>
+
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>
+        {{btnSaveText}}</button>
+    </div>
+  </ng-template>
+
+  <ng-template #templateQA>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left ">Bulk Upload Small Test QA</h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHideQA()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="qaForm">
+
+        <div class="form-group row">
+          <label class="col-lg-6 col-md-6 col-12 col-form-label required">Small Test </label>
+          <div class="col-lg-12 col-md-6 col-12">
+            <ng-select formControlName="Test" [ngClass]="{ 'is-invalid': submitted && q.Test.errors }"
+              [clearable]="false" [clearOnBackspace]="false" [items]="testList" bindLabel="SmallTestName_bn"
+              bindValue="ID" placeholder="Select a test" [(ngModel)]="selectedTest">
+            </ng-select>
+            <div *ngIf="submitted && q.Test.errors" class="error-text">
+              <span *ngIf="q.Test.errors.required" class="text-danger"> Small test is
+                required</span>
+            </div>
+          </div>
+        </div>
+
+
+        <div class="form-group row">
+          <label class="col-lg-6 col-md-6 col-12 col-form-label ">Upload File </label>
+          <div class="col-lg-12 col-md-6 col-12">
+            <input class="form-control mt-2" formControlName="File" accept="application/xls" type="file"
+              (change)="onQAFileChange($event)">
+
+          </div>
+        </div>
+
+
+
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHideQA()"> <i class="feather icon-x"></i>
+        Close</button>
+
+      <button class="btn btn-success btn-sm" (click)="uploadQA()"><i class="feather icon-save"></i>
+        Upload</button>
+    </div>
+  </ng-template>
+</block-ui>

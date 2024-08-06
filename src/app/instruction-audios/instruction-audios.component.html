@@ -1,0 +1,46 @@
+<block-ui>
+            <div class="card ">
+                <h2 class="header-text"><i class="fa fa-file-audio"></i>&nbsp;
+                    Instruction Audios</h2>
+                <div class="card-body ">
+                    <div class="row ">
+                        <div class="col-12">
+                            <form [formGroup]="entryForm">
+                                <div class="form-group row">
+                                    
+                                    <label class="col-lg-2 col-md-2 col-12 col-form-label text-right "> Prior To Result Submit Audio
+                                    </label>
+                                    <div class="col-lg-6 col-md-4 col-12">
+                                       
+                                        <input class="form-control " formControlName="File" accept="application/pdf" type="file"
+                                        (change)="onFileChange($event)">
+                                        <span><b>{{fileName}}</b></span>
+                                    </div>
+
+                                  
+                                   
+                                    <div class="col-lg-4 col-md-6 col-12 ">
+                                        <button type="button" class="btn btn-success btn-md " (click)="Upload()"><i
+                                                class="feather icon-save"></i> Save
+                                        </button>
+                                      
+                                    </div>
+                                   
+                                   
+                                </div>
+                            </form>
+                        </div>
+
+                        <div class="col-12 ">
+                            <div style=" height: 600px">
+                                <ng2-pdfjs-viewer #pdfViewerOnDemand downloadFileName="Course_Wise_Trainee_Study_Report.pdf"
+                                    [openFile]="false" zoom="100" [viewBookmark]="false" [download]="true">
+                                </ng2-pdfjs-viewer>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+       
+</block-ui>

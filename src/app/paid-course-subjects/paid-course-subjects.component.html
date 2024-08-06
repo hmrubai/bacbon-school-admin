@@ -1,0 +1,173 @@
+<block-ui>
+
+  <div class="row ">
+    <div class="col-12 ">
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-10 col-12">
+            <h5>PAID COURSE - SUBJECTS</h5>
+          </div>
+          <div class="col-md-2 col-12 text-right">
+            <button class="btn btn-secondary btn-mini float-right" [placement]="'left'" ngbTooltip="Back" (click)="backToLocation()">
+              <i class="fa fa-arrow-circle-left "></i> Back 
+            </button>
+            <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Add New Subject" (click)="openModal(template)">
+              <i class="fa fa-plus"></i> Add New Subject
+            </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"># </th>
+                  <th scope="col">Subject Name</th>
+                  <th scope="col">URL</th>
+                  <th scope="col">Is Optional?</th>
+                  <th scope="col">Is Active?</th>
+                  <th scope="col">Sort</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of allSubjectList; let i=index">
+                  <td>{{i+1}}</td>
+                  <td>
+                      <strong>{{item.name}} - {{item.name_bn}}</strong>
+                  </td>
+                  <td>
+                    <a [placement]="'top'" ngbTooltip="Show Details" target="_blank" href="{{item.url}}">
+                      {{item.url}}
+                    </a>
+                  </td>
+                  <td>
+                    <span class="text-danger" *ngIf="!item.is_optional">No</span>
+                    <span class="text-success" *ngIf="item.is_optional">Yes</span>
+                  </td>
+                  <td>
+                    <span class="text-danger" *ngIf="!item.is_active">Inactive</span>
+                    <span class="text-success" *ngIf="item.is_active">Active</span>
+                  </td>
+                  <td>
+                    <span>{{item.sort}}</span>
+                  </td>
+                  <td>
+                    <a class="btn btn-icon btn-success btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Edit" (click)="editSelectionTest(item, template)">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <!--<a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="Show Question list" [routerLink]="['/paid-course-test-questions',item.id]">
+                      <i class="fa fa-eye"></i>
+                    </a>-->
+                  </td>
+                </tr>
+                <tr *ngIf="allSubjectList.length <= 0">
+                  <td colspan="7">
+                    <span>No Data Found!</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Subject Name (English) </label>
+              <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                placeholder="Enter Subject name" type="text" class="form-control" />
+              <div *ngIf="submitted && f.name.errors" class="error-text">
+                <span *ngIf="f.name.errors.required" class="text-danger"> Subject Name is required</span>
+                <span *ngIf="f.name.errors.maxlength" class="text-danger">Subject Name must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Subject Name (Bangla) </label>
+              <input type="text" formControlName="name_bn" [ngClass]="{ 'is-invalid': submitted && f.name_bn.errors }"
+                placeholder="Enter Subject name" type="text" class="form-control" />
+              <div *ngIf="submitted && f.name_bn.errors" class="error-text">
+                <span *ngIf="f.name_bn.errors.required" class="text-danger"> Subject Name is required</span>
+                <span *ngIf="f.name_bn.errors.maxlength" class="text-danger">Subject Name must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Subject URL </label>
+              <input type="text" formControlName="url" (input)="onUrlPasteEvent($event)" [ngClass]="{ 'is-invalid': submitted && f.url.errors }"
+                placeholder="Enter Subject URL" class="form-control" />
+              <div *ngIf="submitted && f.url.errors" class="error-text">
+                <span *ngIf="f.url.errors.required" class="text-danger">Subject URL is required</span>
+                <span *ngIf="f.url.errors.maxlength" class="text-danger">Subject URL must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label">Folder Name </label>
+              <input type="text" formControlName="folder_name" [ngClass]="{ 'is-invalid': submitted && f.folder_name.errors }"
+                placeholder="Enter Folder Name" class="form-control" />
+              <div *ngIf="submitted && f.folder_name.errors" class="error-text">
+                <span *ngIf="f.folder_name.errors.required" class="text-danger">Folder Name is required</span>
+                <span *ngIf="f.folder_name.errors.maxlength" class="text-danger">Folder Name must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Sort </label>
+              <input formControlName="sort" [ngClass]="{ 'is-invalid': submitted && f.sort.errors }"
+                placeholder="Enter Total Marks" type="number" class="form-control" />
+              <div *ngIf="submitted && f.sort.errors" class="error-text">
+                <span *ngIf="f.sort.errors.required" class="text-danger">Sort is required</span>
+                <span *ngIf="f.sort.errors.maxlength" class="text-danger">Sort must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+              <div class="form-group row">
+                  <div class="col-12">
+                      <div class="custom-control custom-checkbox col-form-label">
+                        <input type="checkbox" formControlName="is_optional" class="custom-control-input" style="left: 2px !important;" [ngClass]="{ 'is-invalid': submitted && f.is_optional.errors }" id="is_only_test">
+                        <label class="custom-control-label" for="is_optional"> Is Optional?</label>
+                      </div>
+                  </div>
+              </div>
+          </div>
+          <div class="col-6">
+              <div class="form-group row">
+                  <div class="col-12">
+                      <div class="custom-control custom-checkbox col-form-label">
+                        <input type="checkbox" formControlName="is_active" class="custom-control-input" style="left: 2px !important;" [ngClass]="{ 'is-invalid': submitted && f.is_active.errors }" id="is_only_test">
+                        <label class="custom-control-label" for="is_active"> Is Active?</label>
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>

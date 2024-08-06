@@ -1,0 +1,14 @@
+<div class="modal-header p-2">
+    <h4 id="modalTitle" class="modal-title text-center">{{title}}</h4>
+    <button type="button " class="close pull-right " aria-label="Close " (click)="bsModalRef.hide()">
+        <i class="feather icon-x"></i>
+    </button>
+</div>
+<div class="modal-body p-0" [style.height.px]="height">
+    <ng2-pdfjs-viewer #pdfViewerOnDemand [downloadFileName]="fileName" [openFile]="false" zoom="page-width"
+        cursor="HAND" [viewBookmark]="false" [download]="true" [startPrint]="startPrint">
+    </ng2-pdfjs-viewer>
+</div>
+<div class="modal-footer text-center p-1">
+    <button class="btn btn-info" (click)="bsModalRef.hide()"> <i class="feather icon-x"></i> Close</button>
+</div>

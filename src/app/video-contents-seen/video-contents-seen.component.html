@@ -1,0 +1,116 @@
+<block-ui>
+
+  <div class="card ">
+    <div class="card-header">
+      <h2 class="mb-0"><i class="fa fa-play"></i>&nbsp;
+        Video Seen Progress</h2>
+    </div>
+    <div class="card-body p-0 m-0">
+      <ng-container *ngFor="let item of classes">
+        <div class="card card-border-default">
+          <div class="card-header p-0">
+            <div class="alert alert-info p-2 m-0 cursor-pointer" (click)="item.collapsed = !item.collapsed"
+              [attr.aria-expanded]="!item.collapsed">
+              <button class="btn btn-icon btn-mini"
+                [ngClass]="{'btn-success': item.collapsed, 'btn-danger': !item.collapsed }">
+                <i class="feather" [ngClass]="{'icon-plus': item.collapsed, 'icon-minus': !item.collapsed }"></i>
+              </button> {{item.Name}}
+            </div>
+            <!-- <h5><i class="fa fa-video"></i> Videos Completed</h5> -->
+          </div>
+          <div class="card-body p-0 pb-2" id="collapse{{item.ID}}" [collapse]="item.collapsed" [isAnimated]="true">
+            
+                <div class="row ">
+                  <div class="col-md-6 col-lg-6 col-12 " *ngFor="let item of item.Subjects; let i=index">
+    
+                    <div class="card ">
+                      <div class="card-header row">
+                        <div class="col-md-10 col-12">
+                          <h5> <strong>{{item.Name}}</strong> </h5><br>
+                          <span>Sorted by highest participation count</span>
+                        </div>
+                        <div class="col-md-2 col-12  text-right">
+    
+                          <!-- <button class="btn  btn-info btn-mini ml-1 mb-1" (click)="downloadSample(item.ID)" [placement]="'top'"
+                        ngbTooltip="Download Excel"  queryParamsHandling="merge">
+                        <i class="feather icon-download"></i>
+                      </button> -->
+                          <button class="btn btn-info btn-mini ml-1 mb-1"
+                            [routerLink]="['/video-contents-seen-details', item.ID]" [placement]="'top'" ngbTooltip="Show All">
+                            <i class="fa fa-list"> Show All</i>
+                          </button>
+    
+                        </div>
+    
+    
+                      </div>
+    
+                      <div class="card-body p-0 m-0">
+                        <div class="table-responsive">
+    
+                          <table class="table table-sm table-hover table-bordered table-striped">
+                            <thead>
+                              <tr>
+                                <th scope="col"># </th>
+                                <th scope="col">Video Title</th>
+                                <th scope="col" class="text-wrap" style="width: 10%">Watched Duration</th>
+                                <th scope="col" class="text-wrap" style="width: 10%">Seen (Times)</th>
+    
+                              </tr>
+                            </thead>
+    
+                            <tbody>
+                              <tr *ngFor="let video of item.Videos; let i=index">
+                                <td>
+                                  {{i+1}}
+                                </td>
+                                <td>
+                                  <span>{{video.VideoTitle_bn}}</span>
+                                </td>
+                                <td>
+                                  <ng-container *ngIf="video.SeenDurationSec >= 1; else videoSeenElseTemplate">
+                                    <ng-container *ngIf="video.SeenDurationSec / 60  < 1; else elseTemplate">
+                                      Less than a minute
+                                    </ng-container>
+                                    <ng-template #elseTemplate>
+                                      {{video.SeenDurationSec / 60 | floor }} mint
+                                      {{video.SeenDurationSec % 60 | number:'1.0-0'}} sec
+                                    </ng-template>
+                                  </ng-container>
+                                  <ng-template #videoSeenElseTemplate>
+                                    N/A
+                                  </ng-template>
+                                </td>
+                                <td class="text-left">{{video.SeenTimes}}</td>
+    
+    
+                              </tr>
+    
+    
+                            </tbody>
+    
+                          </table>
+    
+                        </div>
+                      </div>
+    
+    
+    
+                    </div>
+    
+                  </div>
+                </div>
+    
+    
+             
+            </div>
+           
+        </div>
+      </ng-container>
+
+
+    </div>
+
+  </div>
+
+</block-ui>

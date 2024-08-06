@@ -1,0 +1,215 @@
+<block-ui>
+  <div class="row ">
+    <div class="col-12 ">
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-10 col-12">
+            <h5>DAILY QUIZ LIST</h5>
+          </div>
+          <div class="col-md-2 col-12 text-right">
+            <button class="btn btn-success btn-mini float-right" [placement]="'left'" ngbTooltip="Create New Daily Quiz" (click)="openModal(template)">
+              <i class="fa fa-plus"></i> Create New
+            </button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"># </th>
+                  <th scope="col">Test Name</th>
+                  <th scope="col">From</th>
+                  <th scope="col">To</th>
+                  <th scope="col">Total Questions</th>
+                  <th scope="col">Duration</th>
+                  <th scope="col">Positive Mark/Question</th>
+                  <th scope="col">Negative Mark/Question</th>
+                  <th scope="col">Total Marks</th>
+                  <th scope="col">Participated</th>
+                  <th scope="col">Status</th>
+                  <th scope="col">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of selectionTest; let i=index">
+                  <td>{{i+1}}</td>
+                  <td> 
+                    <a [placement]="'top'" ngbTooltip="Show Question list" [routerLink]="['/selection-test-questions',item.id]">
+                      <strong>{{item.exam_name}}</strong>
+                    </a>
+                  </td>
+                  <td>
+                    <span>{{item.appeared_from | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}}</span>
+                  </td>
+                  <td>
+                    <span>{{item.appeared_to | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}}</span>
+                  </td>
+                  <td> <span class="text-wrap">{{item.question_number}}</span> </td>
+                  <td> <span class="text-wrap">{{item.duration}}</span> </td>
+                  <td> <span>{{item.positive_mark}}</span> </td>
+                  <td> <span>{{item.negative_mark}}</span> </td>
+                  <td>
+                    <span>{{item.total_mark}}</span>
+                  </td>
+                  <td>
+                    <span>{{item.total_participated}}</span>
+                  </td>
+                  <td>
+                    <span *ngIf="item.finished" class="btn btn-mini col-sm-12 btn-warning"> Finished</span>
+                    <span *ngIf="!item.finished" class="btn btn-mini col-sm-12 btn-success"> Active</span>
+                  </td>
+                  <td>
+                    <a class="btn btn-icon btn-success btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Edit" (click)="editSelectionTest(item, template)">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="Show Participant Details" [routerLink]="['/participant-list',item.id]">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                    <a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" *ngIf="item.total_participated <= 0" [placement]="'bottom'" ngbTooltip="Delete"
+                      target="_blank" (click)="deleteSelectionTest(item)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Question </label>
+              <input type="text" formControlName="question" [ngClass]="{ 'is-invalid': submitted && f.question.errors }"
+                placeholder="Enter Question" type="text" class="form-control" />
+              <div *ngIf="submitted && f.question.errors" class="error-text">
+                <span *ngIf="f.question.errors.required" class="text-danger"> Question is required</span>
+                <span *ngIf="f.question.errors.maxlength" class="text-danger">Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Option 01 </label>
+              <input formControlName="option_01" [ngClass]="{ 'is-invalid': submitted && f.option_01.errors }"
+                placeholder="Option 01" type="text" class="form-control" />
+              <div *ngIf="submitted && f.option_01.errors" class="error-text">
+                <span *ngIf="f.option_01.errors.required" class="text-danger">Option 01 is required</span>
+                <span *ngIf="f.option_01.errors.maxlength" class="text-danger">Option 01 must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Option 02 </label>
+              <input formControlName="option_02" [ngClass]="{ 'is-invalid': submitted && f.option_02.errors }"
+                placeholder="Option 02" type="text" class="form-control" />
+              <div *ngIf="submitted && f.option_02.errors" class="error-text">
+                <span *ngIf="f.option_02.errors.required" class="text-danger">Option 02 is required</span>
+                <span *ngIf="f.option_02.errors.maxlength" class="text-danger">Option 02 must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Option 03 </label>
+              <input formControlName="option_03" [ngClass]="{ 'is-invalid': submitted && f.option_03.errors }"
+                placeholder="Option 03" type="text" class="form-control" />
+              <div *ngIf="submitted && f.option_03.errors" class="error-text">
+                <span *ngIf="f.option_03.errors.required" class="text-danger">Option 03 is required</span>
+                <span *ngIf="f.option_03.errors.maxlength" class="text-danger">Option 03 must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Option 04 </label>
+              <input formControlName="option_04" [ngClass]="{ 'is-invalid': submitted && f.option_04.errors }"
+                placeholder="Option 04" type="text" class="form-control" />
+              <div *ngIf="submitted && f.option_04.errors" class="error-text">
+                <span *ngIf="f.option_04.errors.required" class="text-danger">Option 04 is required</span>
+                <span *ngIf="f.option_04.errors.maxlength" class="text-danger">Option 05 must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <!--<div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Number of Total Questions </label>
+              <input type="text" formControlName="question_number" [ngClass]="{ 'is-invalid': submitted && f.question_number.errors }"
+                placeholder="Enter Number of Total Questions" type="number" class="form-control" />
+              <div *ngIf="submitted && f.question_number.errors" class="error-text">
+                <span *ngIf="f.question_number.errors.required" class="text-danger">Number of Total Questions is required</span>
+                <span *ngIf="f.question_number.errors.maxlength" class="text-danger">Number of Total Questions must be within 250 characters</span>
+              </div>
+            </div>
+          </div>-->
+
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required mr-2">Correct Answer </label>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio1" value="1">
+                <label class="form-check-label" for="inlineRadio1">Option 01</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio2" value="2">
+                <label class="form-check-label" for="inlineRadio2">Option 02</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio3" value="3">
+                <label class="form-check-label" for="inlineRadio3">Option 03</label>
+              </div>
+              <div class="form-check form-check-inline">
+                <input class="form-check-input" type="radio" name="inlineRadioOptions" id="inlineRadio4" value="4">
+                <label class="form-check-label" for="inlineRadio4">Option 04</label>
+              </div>
+            </div>
+          </div>
+          
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Price Amount </label>
+              <input type="number" formControlName="price_amount" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.price_amount.errors }"
+                placeholder="Enter Price" class="form-control" />
+              <div *ngIf="submitted && f.price_amount.errors" class="error-text">
+                <span *ngIf="f.price_amount.errors.required" class="text-danger">Price Amount is required</span>
+                <span *ngIf="f.price_amount.errors.maxlength" class="text-danger">Price Amount must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Appeare Date </label>
+              <input type="text" formControlName="appeared_to" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.appeared_to.errors }"
+                placeholder="Enter Ending Date" type="datetime-local" class="form-control" />
+              <div *ngIf="submitted && f.appeared_to.errors" class="error-text">
+                <span *ngIf="f.appeared_to.errors.required" class="text-danger">Appeared To is required</span>
+                <span *ngIf="f.appeared_to.errors.maxlength" class="text-danger">Appeared To must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>

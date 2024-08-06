@@ -1,0 +1,224 @@
+<block-ui>
+
+ 
+      <div class="card">
+        <div class="card-header">
+          <h5><i class="fa fa-file"></i>&nbsp;SUBJECT CHAPTER VIDEO BIG TEST AUDIO LIST</h5>
+          <button class="btn btn-info  float-right" (click)="openModal(template)"><i
+              class="feather icon-plus"></i> Add Audio</button>
+
+
+        </div>
+
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12">
+              <form [formGroup]="filterForm" class="row">
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <ng-select formControlName="Class" [clearable]="false" [clearOnBackspace]="false" [items]="classList"
+                      bindLabel="ClassName_bn" bindValue="ID" placeholder="Select an class" (change)="onChangeFilterClass($event)">
+                    </ng-select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                   
+                        <ng-select formControlName="Subject" [ngClass]="{ 'is-invalid': submitted && f.Subject.errors }"
+                          [clearable]="false" [clearOnBackspace]="false" [items]="subjectListFilter" bindLabel="SubjectName_bn" (change)="onChangeFilterSubject($event)"
+                          bindValue="ID" placeholder="Select an subject" >
+                        </ng-select>
+                       
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                  <div class="form-group">
+                    <ng-select formControlName="Level" [ngClass]="{ 'is-invalid': submitted && f.Level.errors }"
+                    [clearable]="false" [clearOnBackspace]="false" [items]="levelListFilter" bindLabel="LevelName_bn" bindValue="ID"
+                    placeholder="Select an chapter" [(ngModel)]="selectedLevel">
+                  </ng-select>
+                  </div>
+                </div>
+    
+                <div class="col-lg-3 col-md-6 col-sm-6 col-12">
+                  <button type="button" class="btn btn-info  ml-2" (click)="getList()">
+                    <i class="feather icon-filter"></i> Filter
+                  </button>
+                  <button type="button" class="btn btn-outline-danger  ml-2" (click)="resetFilterList()">
+                    <i class="feather icon-refresh-ccw"></i> Reset
+                  </button>
+                </div>
+              </form>
+    
+            </div>
+    
+          </div>
+          <div class="row">
+            <div class="col-12 ">
+
+              <ngx-datatable class="material table-bordered" [rows]="rows" #dataTable [loadingIndicator]="loadingIndicator"
+              [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto" [limit]="10"
+              [scrollbarH]="true">
+
+                <ngx-datatable-column [width]="60" name="Sl" prop="Id" [draggable]="false" [sortable]="false">
+                  <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                    <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Class" prop="ClassName" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Subject" prop="SubjectName" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Chapter Name" prop="LevelName" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Big Test En" prop="BigTestNameEn" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Big Test Bn" prop="BigTestNameBn" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+                <ngx-datatable-column name="Audio Path" prop="AudioPath" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+
+
+                <ngx-datatable-column [maxWidth]="100" name="Action" [draggable]="false" [sortable]="false"
+                  headerClass="text-center" cellClass="text-center">
+                  <ng-template let-row="row" ngx-datatable-cell-template>
+                    <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'"
+                     ngbTooltip="Edit" (click)="getItem(row.ID,template)" >
+                      <i class="feather icon-edit"></i>
+                    </button>
+                  </ng-template>
+                </ngx-datatable-column>
+
+              </ngx-datatable>
+
+            </div>
+
+
+
+          </div>
+
+        </div>
+      </div>
+    
+
+  <ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file-audio m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Class </label>
+              <ng-select formControlName="Class" [ngClass]="{ 'is-invalid': submitted && f.Class.errors }" (change)="onChangeClass($event)"
+                [clearable]="false" [clearOnBackspace]="false" [items]="classList" bindLabel="ClassName_bn" bindValue="ID"
+                placeholder="Select an class">
+              </ng-select>
+              <div *ngIf="submitted && f.Class.errors" class="error-text">
+                <span *ngIf="f.Class.errors.required" class="text-danger"> Class is
+                  required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Subject </label>
+              <ng-select formControlName="Subject" [ngClass]="{ 'is-invalid': submitted && f.Subject.errors }" (change)="onChangeSubject($event)"
+                [clearable]="false" [clearOnBackspace]="false" [items]="subjectList" bindLabel="SubjectName_bn" bindValue="ID"
+                placeholder="Select an subject"
+                [(ngModel)]="selectedSubject">
+              </ng-select>
+              <div *ngIf="submitted && f.Subject.errors" class="error-text">
+                <span *ngIf="f.Subject.errors.required" class="text-danger"> Subject is
+                  required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Chapter </label>
+              <ng-select formControlName="Level" [ngClass]="{ 'is-invalid': submitted && f.Level.errors }"
+                [clearable]="false" [clearOnBackspace]="false" [items]="levelList" bindLabel="LevelName_bn" bindValue="ID"
+                placeholder="Select an chapter" [(ngModel)]="selectedLevel">
+              </ng-select>
+              <div *ngIf="submitted && f.Level.errors" class="error-text">
+                <span *ngIf="f.Level.errors.required" class="text-danger">
+                  Chapter name is required
+                </span>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Big Test </label>
+              <ng-select formControlName="Test" [ngClass]="{ 'is-invalid': submitted && f.Test.errors }"
+                [clearable]="false" [clearOnBackspace]="false" [items]="testList" bindLabel="BigTestName_bn" bindValue="ID"
+                placeholder="Select a big test">
+              </ng-select>
+              <div *ngIf="submitted && f.Test.errors" class="error-text">
+                <span *ngIf="f.Test.errors.required" class="text-danger">
+                  Big test is required
+                </span>
+
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label ">Audio File </label>
+              <input class="form-control mt-2" formControlName="File" accept="application/pdf" type="file"
+                (change)="onFileChange($event)">
+
+            </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>
+        Close</button>
+
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>
+        {{btnSaveText}}</button>
+    </div>
+  </ng-template>
+
+</block-ui>

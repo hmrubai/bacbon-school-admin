@@ -1,0 +1,157 @@
+<block-ui>
+
+  <div class="row ">
+    <div class="col-12 ">
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-10 col-12">
+            <h5>COURSE METERIALS - SUBJECTS</h5>
+          </div>
+          <div class="col-md-2 col-12 text-right">
+            <button class="btn btn-secondary btn-mini float-right" [placement]="'left'" ngbTooltip="Back" (click)="backToLocation()">
+              <i class="fa fa-arrow-circle-left "></i> Back 
+            </button>
+            <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Add New Subject" (click)="openModal(template)">
+              <i class="fa fa-plus"></i> Add Subject
+            </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"># </th>
+                  <th scope="col">Subject Name</th>
+                  <th scope="col">Number Of Questions</th>
+                  <th scope="col">Is Active?</th>
+                  <th scope="col">Is Optional?</th>
+                  <th scope="col">Optional Subject</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of allSubjectList; let i=index">
+                  <td>{{i+1}}</td>
+                  <td>
+                      <strong>{{item.name}}</strong>
+                  </td>
+                  <td>
+                    <strong>{{ item.number_of_questions }}</strong>
+                  </td>
+                  <td>
+                    <span class="text-danger" *ngIf="!item.is_active">Inactive</span>
+                    <span class="text-success" *ngIf="item.is_active">Active</span>
+                  </td>
+                  <td>
+                    <span class="text-danger" *ngIf="!item.is_optional">No</span>
+                    <span class="text-success" *ngIf="item.is_optional">Yes</span>
+                  </td>
+                  <td>
+                    <strong>{{ item.subject_name }}</strong>
+                  </td>
+                  <td>
+                    <a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Edit" (click)="deleteSubjectFromDB(item)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngIf="allSubjectList.length <= 0">
+                  <td colspan="7">
+                    <span>No Data Found!</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-sm-6">
+              <div class="form-group">
+                  <label class="col-form-label required">Select Subject </label>
+                  <ng-select formControlName="subject_id" [ngClass]="{ 'is-invalid': submitted && f.subject_id.errors }"
+                      [clearable]="false" [clearOnBackspace]="false" [items]="coreSubjectList" bindLabel="name"
+                      bindValue="id" placeholder="Select Subject">
+                  </ng-select>
+                  <div *ngIf="submitted && f.subject_id.errors" class="error-text">
+                      <span *ngIf="f.subject_id.errors.required" class="text-danger">Select Optional Subject is required</span>
+                      <span *ngIf="f.subject_id.errors.maxlength" class="text-danger">Select Optional Subject must be within 250 characters</span>
+                  </div>
+              </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Number Of Questions </label>
+              <input formControlName="number_of_questions" [ngClass]="{ 'is-invalid': submitted && f.number_of_questions.errors }"
+                placeholder="Number Of Questions" type="number" class="form-control" />
+              <div *ngIf="submitted && f.number_of_questions.errors" class="error-text">
+                <span *ngIf="f.number_of_questions.errors.required" class="text-danger">Number Of Questions is required</span>
+                <span *ngIf="f.number_of_questions.errors.maxlength" class="text-danger">Number Of Questions must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-2">
+              <div class="form-group row">
+                  <div class="col-12 mt-4">
+                    <button class="btn btn-success mt-4" (click)="addSubject()"><i class="fa fa-plus"></i> Add</button>
+                  </div>
+              </div>
+          </div>
+          <div class="col-sm-12">
+              <h3>Subject List</h3>
+              <table class="table">
+                <thead>
+                  <tr>
+                    <td><strong>Subject</strong></td>
+                    <td><strong>Number of questions</strong></td>
+                    <td><strong>Is Optional</strong></td>
+                    <td><strong>Action</strong></td>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let item of submitSubjectList; let i=index">
+                    <td>
+                        {{ item.name }}
+                    </td>
+                    <td>
+                        {{ item.number_of_questions }}
+                    </td>
+                    <td>
+                        {{ item.is_optional }}
+                    </td>
+                    <td>
+                        <i class="fa fa-trash text-danger a-link" (click)="deleteSubjectFromList(i)"></i>
+                    </td>
+                  </tr>
+                  <tr *ngIf="submitSubjectList.length <= 0">
+                    <td colspan="4">No Item Added!</td>
+                  </tr>
+                </tbody>
+              </table>
+              
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="saveSubjectList()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>

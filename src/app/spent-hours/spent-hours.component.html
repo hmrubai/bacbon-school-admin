@@ -1,0 +1,374 @@
+<block-ui>
+  <div class="col-12">
+    <div class="card mb-0">
+      <div class="card-header">
+        <h2 class="mb-0"><i class="fa fa-clock"></i>&nbsp;
+          Spent Hours on Videos, Scripts & Tests</h2>
+      </div>
+
+      <div class="card-body p-0">
+        <div class="row">
+
+          <div class="col-lg-4 col-md-6 col-12">
+            <app-card [hidHeader]="true" [isCardFooter]="true" footerClass="bg-c-red">
+              <div class="row align-items-center">
+                <div class="col-lg-8 col-md-8 col-12">
+                  <h2 class="text-c-red"><strong><b>{{TotalVideoSpentTime}}</b></strong></h2>
+                  <h4 class="text-uppercase mb-0" style="color: gray;"><strong><b>Total Spent Hours on
+                        Videos</b></strong></h4>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12 text-right">
+                  <img src="assets/images/multimedia.png" class="wid-60">
+                </div>
+              </div>
+
+            </app-card>
+          </div>
+          <div class="col-lg-4 col-md-6 col-12">
+            <app-card [hidHeader]="true" [isCardFooter]="true" footerClass="bg-c-yellow">
+              <div class="row align-items-center">
+                <div class="col-lg-8 col-md-8 col-12">
+                  <h2 class="text-c-yellow"><strong><b>{{TotalScriptTime}}</b></strong></h2>
+                  <h4 class="text-uppercase mb-0" style="color: gray;"><strong><b>Total Spent Hours on
+                        Scripts</b></strong></h4>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12 text-right">
+                  <img src="assets/images/document.png" class="wid-60">
+                </div>
+              </div>
+
+            </app-card>
+          </div>
+          <div class="col-lg-4 col-md-6 col-12">
+            <app-card [hidHeader]="true" [isCardFooter]="true" footerClass="bg-c-blue">
+              <div class="row align-items-center">
+                <div class="col-lg-8 col-md-8 col-12">
+                  <h2 class="text-c-blue"><strong><b>{{TotalExamSpentTime}}</b></strong></h2>
+                  <h4 class="text-uppercase mb-0" style="color: gray;"><strong><b>Total Spent Hours on
+                        Tests</b></strong></h4>
+                </div>
+                <div class="col-lg-4 col-md-4 col-12 text-right">
+                  <img src="assets/images/exam.png" class="wid-60">
+                </div>
+              </div>
+              <div class="app-card-footer">
+                <div class="row align-items-center">
+                  <div class="col-9">
+
+                  </div>
+                  <div class="col-3 text-right">
+
+                  </div>
+                </div>
+              </div>
+            </app-card>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-12">
+            <ng-container *ngFor="let item of classes">
+              <div class="card card-border-default">
+                <div class="card-header p-0">
+                  <div class="alert alert-info p-2 m-0 cursor-pointer" (click)="item.collapsed = !item.collapsed"
+                    [attr.aria-expanded]="!item.collapsed">
+                    <button class="btn btn-icon btn-mini"
+                      [ngClass]="{'btn-success': item.collapsed, 'btn-danger': !item.collapsed }">
+                      <i class="feather" [ngClass]="{'icon-plus': item.collapsed, 'icon-minus': !item.collapsed }"></i>
+                    </button> {{item.Name}}
+                  </div>
+                  <!-- <h5><i class="fa fa-video"></i> Videos Completed</h5> -->
+                </div>
+                <div class="card-body p-0 pb-2" id="collapse{{item.ID}}" [collapse]="item.collapsed"
+                  [isAnimated]="true">
+
+                  <div class="row ">
+                    <div class="col-md-6 col-lg-6 col-12  ">
+
+                      <div class="card">
+                        <div class="card-header row">
+                          <div class="col-md-10 col-12">
+                            <h5><i class="fa fa-play-circle" style="color: red;"></i>&nbsp;SPENT HOURS ON VIDEOS</h5>
+                          </div>
+                          <div class="col-md-2 col-12  text-right">
+
+                            <!-- <button class="btn  btn-info btn-mini ml-1 mb-1" [placement]="'top'"
+                              ngbTooltip="Download Excel" (click)="downloadSampleVideo()">
+                              <i class="feather icon-download"></i>
+                            </button> -->
+                            <button class="btn btn-info btn-mini ml-1 mb-1"
+                              [routerLink]="['/video-contents-spent-hour-list',item.ID]" [placement]="'top'"
+                              ngbTooltip="Show All">
+                              <i class="fa fa-list"> Show All</i>
+                            </button>
+
+                          </div>
+
+
+                        </div>
+                        <div class="card-body p-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-hover table-bordered table-striped">
+                              <thead>
+                                <tr>
+                                  <th scope="col"># </th>
+                                  <th scope="col">Learner Name</th>
+                                  <th scope="col">School </th>
+                                  <th scope="col">Time</th>
+
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                <tr *ngFor="let video of item.Videos; let i=index">
+                                  <!-- <tr *ngFor="let item of TestList.list; let i=index"> -->
+
+                                  <td>
+                                    {{i+1}}
+                                  </td>
+                                  <td>
+                                    <a class="text-wrap mr-2" target="_blank"
+                                      [routerLink]="['/learner-details',video.ID]">
+                                      <img *ngIf="video.Picture" [src]="baseUrl+video.Picture" class="rounded-circle"
+                                        width="30" height="30">
+                                      <img *ngIf="!video.Picture" src="assets/images/user/user-avatar-blank.png"
+                                        class="rounded-circle" width="30" height="30">
+
+                                    </a>
+                                    <span>
+                                      <a target="_blank" [routerLink]="['/learner-details',video.ID]"
+                                        class="text-dark">{{video.LearnerName}}</a>
+                                    </span>
+                                  </td>
+                                  <td>
+                                    {{video.School}}
+                                  </td>
+
+                                  <td>
+                                    {{video.SpentTime}}
+                                  </td>
+                                </tr>
+
+                              </tbody>
+
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-12">
+                      <div class="col-12">
+                        <app-card [hidHeader]="true" blockClass="p-0" cardClass="flat-card widget-purple-card">
+                          <div class="row-table">
+                            <div class="col-sm-3 card-body ">
+                              <img src="assets/images/play.png" class="wid-50 ">
+                              <!-- <i class="feather icon-users mr-1"></i> -->
+                            </div>
+                            <div class="col-sm-9">
+                              <h2 class="mb-0">{{item.VideosCount}}</h2>
+                              <h4>Total Spent Hours on Videos</h4>
+                            </div>
+                          </div>
+                        </app-card>
+
+                      </div>
+                      <div class="col-12">
+                        <app-card [hidHeader]="true" blockClass="p-0" cardClass="flat-card widget-purple-card">
+                          <div class="row-table">
+                            <div class="col-sm-3 card-body ">
+                              <img src="assets/images/paper.png" class="wid-50 ">
+                              <!-- <i class="feather icon-star-on"></i> -->
+                            </div>
+                            <div class="col-sm-9 pt-1 pb-1">
+                              <h2 class="mb-0">{{item.ScriptsCount}}</h2>
+                              <h4>Total Spent Hours on Scripts</h4>
+                            </div>
+                          </div>
+                        </app-card>
+
+
+                      </div>
+                      <div class="col-12">
+                        <app-card [hidHeader]="true" blockClass="p-0" cardClass="flat-card widget-purple-card">
+                          <div class="row-table">
+                            <div class="col-sm-3 card-body ">
+                              <img src="assets/images/open-book.png" class="wid-50 ">
+                              <!-- <i class="feather icon-star-on"></i> -->
+                            </div>
+                            <div class="col-sm-9 pt-1 pb-1">
+                              <h2 class="mb-0">{{item.TestsCount}}</h2>
+                              <h4>Total Spent Hours on Tests </h4>
+                            </div>
+                          </div>
+                        </app-card>
+
+
+                      </div>
+
+                    </div>
+                  </div>
+                  <br>
+                  <div class="row ">
+                    <div class="col-md-6 col-lg-6 col-12  ">
+
+                      <div class="card mb-0">
+                        <div class="card-header row">
+                          <div class="col-md-10 col-12">
+                            <h5><i class="fa fa-book" style="color: #1abc9c;"></i>&nbsp;SPENT HOURS ON TESTS</h5>
+                          </div>
+                          <div class="col-md-2 col-12 text-right ">
+                            <!--   
+                            <button class="btn  btn-info btn-mini ml-1 mb-1"  [placement]="'top'"
+                              ngbTooltip="Download Excel" (click)="downloadSampleTest()">
+                              <i class="feather icon-download"></i>
+                            </button> -->
+                            <button class="btn btn-info btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="Show All"
+                              [routerLink]="['/test-spent-hour-list',item.ID]">
+                              <i class="fa fa-list"> Show All</i>
+                            </button>
+
+                          </div>
+
+
+                        </div>
+                        <div class="card-body p-0">
+
+                          <div class="table-responsive">
+                            <table class="table table-sm table-hover table-bordered table-striped">
+                              <thead>
+                                <tr>
+                                  <th scope="col"># </th>
+                                  <th scope="col">Learner Name</th>
+                                  <th scope="col">School </th>
+                                  <th scope="col">Time</th>
+
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                <tr *ngFor="let test of item.Tests; let i=index">
+                                  <!-- <tr *ngFor="let item of TestList.list; let i=index"> -->
+
+                                  <td>
+                                    {{i+1}}
+                                  </td>
+                                  <td>
+                                    <a class="text-wrap mr-2" target="_blank"
+                                      [routerLink]="['/learner-details',test.ID]">
+                                      <img *ngIf="test.Picture" [src]="baseUrl+test.Picture" class="rounded-circle"
+                                        width="30" height="30">
+                                      <img *ngIf="!test.Picture" src="assets/images/user/user-avatar-blank.png"
+                                        class="rounded-circle" width="30" height="30">
+
+                                    </a>
+                                    <span>
+                                      <a target="_blank" [routerLink]="['/learner-details',test.ID]"
+                                        class="text-dark">{{test.LearnerName}}</a>
+                                    </span>
+                                  </td>
+                                  <td>
+                                    {{test.School}}
+                                  </td>
+
+                                  <td>
+                                    {{test.SpentTime}}
+                                  </td>
+                                </tr>
+
+                              </tbody>
+
+                            </table>
+                          </div>
+
+                        </div>
+                      </div>
+
+                    </div>
+                    <div class="col-md-6 col-lg-6 col-12  ">
+
+                      <div class="card mb-0">
+                        <div class="card-header row">
+                          <div class="col-md-10 col-12">
+                            <h5><i class="fa fa-file" style="color: #f1c40f;"></i>&nbsp;SPENT HOURS ON SCRIPTS</h5>
+                          </div>
+                          <div class="col-md-2 col-12  text-right">
+
+                            <!-- <button class="btn  btn-info btn-mini ml-1 mb-1"  [placement]="'top'"
+                              ngbTooltip="Download Excel" (click)="downloadSampleExam()">
+                              <i class="feather icon-download"></i>
+                            </button> -->
+                            <button class="btn btn-info btn-mini ml-1 mb-1"
+                              [routerLink]="['/script-spent-hour-list',item.ID]" [placement]="'top'"
+                              ngbTooltip="Show All">
+                              <i class="fa fa-list"> Show All</i>
+                            </button>
+
+                          </div>
+
+
+                        </div>
+                        <div class="card-body p-0">
+                          <div class="table-responsive">
+                            <table class="table table-sm table-hover table-bordered table-striped">
+                              <thead>
+                                <tr>
+                                  <th scope="col"># </th>
+                                  <th scope="col">Learner Name</th>
+                                  <th scope="col">School </th>
+                                  <th scope="col">Time</th>
+                                </tr>
+                              </thead>
+
+                              <tbody>
+                                <tr *ngFor="let script of item.Scripts; let i=index">
+                                  <!-- <tr *ngFor="let item of TestList.list; let i=index"> -->
+
+                                  <td>
+                                    {{i+1}}
+                                  </td>
+                                  <td>
+                                    <a class="text-wrap mr-2" target="_blank"
+                                      [routerLink]="['/learner-details',script.ID]">
+                                      <img *ngIf="script.Picture" [src]="baseUrl+script.Picture" class="rounded-circle"
+                                        width="30" height="30">
+                                      <img *ngIf="!script.Picture" src="assets/images/user/user-avatar-blank.png"
+                                        class="rounded-circle" width="30" height="30">
+
+                                    </a>
+                                    <span>
+                                      <a target="_blank" [routerLink]="['/learner-details',script.ID]"
+                                        class="text-dark">{{script.LearnerName}}</a>
+                                    </span>
+                                  </td>
+                                  <td>
+                                    {{script.School}}
+                                  </td>
+                                  <td>
+                                    {{script.SpentTime}}
+                                  </td>
+                                </tr>
+
+                              </tbody>
+
+                            </table>
+                          </div>
+                        </div>
+                      </div>
+
+                    </div>
+
+                  </div>
+
+
+                </div>
+
+              </div>
+            </ng-container>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</block-ui>

@@ -1,0 +1,44 @@
+<block-ui>
+
+  <div class="row">
+    <div class="col-sm-12">
+      <div class="card card-border-default">
+        <div class="card-header">
+          <h5><i class="fa fa-file"></i>&nbsp;Test Participation | {{subject}} </h5>
+        </div>
+        <div class="card-body">
+          <div class="row">
+            <div class="col-12 ">
+              <ngx-datatable class="material table-bordered" [rows]="rows" #dataTable [loadingIndicator]="loadingIndicator"
+              [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto"
+              [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
+              (page)="setPage($event)" [scrollbarH]="true">
+
+                <ngx-datatable-column [maxWidth]="60" name="Sl" prop="Id" [draggable]="false" [sortable]="false">
+                  <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                    <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Test Name" prop="Name" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                
+                    <span class="text-wrap" title="{{ value }}"> {{value}}
+                    </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+                <ngx-datatable-column name="Participation (Times)" prop="Participation" [width]="150" [draggable]="false" [sortable]="false">
+                  <ng-template let-value="value" ngx-datatable-cell-template>
+                    <span title="{{ value }}"> {{ value }} </span>
+                  </ng-template>
+                </ngx-datatable-column>
+
+              </ngx-datatable>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</block-ui>

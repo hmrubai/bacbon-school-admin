@@ -1,0 +1,172 @@
+<block-ui>
+
+
+  <div class="card ">
+    <div class="card-header">
+      <h5><i class="fa fa-desktop"></i>&nbsp;DEVICE LIST</h5>
+      <div class="row">
+        <div class="col-12 text-right">
+          <button (click)="downloadSample()" class="btn btn-outline-secondary btn-sm float-right mr-2"><i
+              class=" feather icon-download "></i>
+            Download Sample File</button>
+
+        
+          <button type="button" class="btn btn-info btn-sm mr-2 float-right" (click)="openUploadDialogDevice()">
+            <i class="feather icon-upload"></i> Bulk Upload Device
+          </button>
+        </div>
+      </div>
+
+
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12 text-right">
+          <!-- <form [formGroup]="filterForm" class="row">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                <input type="text" formControlName="name" class="form-control" placeholder="Search by name or class" />
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+              <button type="button" class="btn btn-info  ml-2" (click)="getList()">
+                <i class="feather icon-filter"></i> Filter
+              </button>
+              <button type="button" class="btn btn-outline-danger ml-2" (click)="resetFilterList()">
+                <i class="feather icon-refresh-ccw"></i> Reset
+              </button>
+            </div>
+
+            <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+            
+              <button type="button" class="btn btn-outline-success ml-2" (click)="openUploadDialogDevice()">
+                <i class="feather icon-upload"></i>Bulk Upload Device
+              </button>
+            </div>
+          </form> -->
+
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-12 ">
+
+          <ngx-datatable class="material table-bordered" [rows]="rows" #dataTable [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto"
+            [externalPaging]="true" [count]="page.totalElements" [offset]="page.pageNumber" [limit]="page.size"
+            (page)="setPage($event)" [scrollbarH]="true">
+
+            <!-- <ngx-datatable-column [width]="40" name="Sl" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+              </ng-template>
+            </ngx-datatable-column> -->
+
+            <!-- <ngx-datatable-column [width]="200" name="Name" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span class="text-wrap" title="{{row['Name']}}">
+                  <img *ngIf="row['Picture'] " [src]="baseUrl+row['Picture']" class="rounded-circle" width="40"
+                    height="40" [routerLink]="['/Device-details',row.ID]">
+                  <img *ngIf="!row['Picture']" src="assets/images/user/user-avatar-blank.png" class="rounded-circle"
+                    width="40" height="40" [routerLink]="['/Device-details',row.ID]">
+                
+
+                </span>
+                <a [routerLink]="['/Device-details',row.ID]" class="text-wrap text-dark" title="{{row['Name']}}"> {{row['Name']}}
+                </a>
+              </ng-template>
+            </ngx-datatable-column> -->
+
+
+            <ngx-datatable-column [width]="60" name="TAB No" prop="DeviceNo" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+            <!-- 
+            <ngx-datatable-column [width]="100" name="OS ID" prop="DeviceOSID" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column> -->
+
+            <ngx-datatable-column [width]="80" name=" Code" prop="Code" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="130" name=" Material Number" prop="MaterialNumber" [draggable]="false"
+              [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Material Description" prop="MaterialDescription" [draggable]="false"
+              [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="IMEI" prop="IMEI" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="MobileNo" prop="MobileNo" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Area" prop="Area" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="School" prop="School" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [width]="190" name="Entry On" prop="EntryOn" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span *ngIf="value" title="{{ value }}"> {{ value | amFromUtc | amLocal | amDateFormat: 'DD MMM, YYYY
+                  hh:mm A'}} </span>
+                <span *ngIf="!value">-</span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <!--   <ngx-datatable-column name="Details" [draggable]="false" [sortable]="false" headerClass="text-center"
+              cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Show Details"
+                  [routerLink]="['/Device-details',row.ID]">
+                  <i class="fa fa-info"></i>
+                </button>
+              </ng-template>
+            </ngx-datatable-column> -->
+
+          </ngx-datatable>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+  </div>
+
+
+
+</block-ui>

@@ -1,0 +1,11 @@
+.mat-dialog-container{
+    padding: 0;
+}
+
+app-confirm .card{
+    border-top: 0;
+}
+
+app-confirm .card-header{
+    background-color: #e4e4e4 !important;
+}

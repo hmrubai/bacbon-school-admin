@@ -1,0 +1,456 @@
+<block-ui>
+
+  <div class="row ">
+    <div class="col-12 ">
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-6 col-12">
+            <h5>PAID COURSE - TESTS</h5>
+          </div>
+          <div class="col-md-6 col-12 text-right">
+            <button class="btn btn-secondary btn-mini float-right" [placement]="'left'" ngbTooltip="Back" (click)="backToLocation()">
+              <i class="fa fa-arrow-circle-left "></i> Back 
+            </button>
+            <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Add New Test" (click)="openModal(template)">
+              <i class="fa fa-plus"></i> Add New Test
+            </button>
+            <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Upload Test Via Excel" (click)="openUploadTestModal(uploadTemplate)">
+              <i class="fa fa-arrow-up"></i> Upload Test Via Excel
+            </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"># </th>
+                  <th scope="col">Test Name</th>
+                  <th scope="col">Duration</th>
+                  <th scope="col">Marking</th>
+                  <th scope="col">Total Mark</th>
+                  <th scope="col">Type</th>
+                  <th scope="col">Date</th>
+                  <th scope="col">Sort</th>
+                  <th scope="col">Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of allTestList; let i=index">
+                  <td>{{i+1}}</td>
+                  <td>
+                    <a [placement]="'top'" ngbTooltip="Show Question list" [routerLink]="['/paid-course-test-questions',item.id]">
+                      <strong>{{item.name}}</strong><br/>
+                      <small>{{ item.description }}</small>
+                    </a>
+                  </td>
+                  <td>
+                    <span>{{item.quiz_duration}}</span>
+                  </td>
+                  <td>
+                    Positive: <span class="text-success"><strong>{{item.quiz_positive_mark}}</strong></span><br/>
+                    Negative: <span class="text-danger"><strong>{{item.quiz_negative_mark}}</strong></span>
+                  </td>
+                  <td>
+                    <span>{{item.quiz_total_mark}}</span>
+                  </td>
+                  <td>
+                    <span>{{item.test_type}}</span>
+                  </td>
+                  <td>
+                    <span *ngIf="item.appeared_from"><strong>From:</strong> {{item.appeared_from | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}}</span><br/>
+                    <span *ngIf="item.appeared_from"><strong>To:</strong> {{item.appeared_to | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}}</span>
+                  </td>
+                  <td>
+                      <span class="text-success" *ngIf="item.sufficient_question"><strong><i class="fa fa-check-circle"></i> </strong></span>
+                      <span class="text-danger" *ngIf="!item.sufficient_question"><strong><i class="fa fa-circle"></i> </strong></span>
+                      <span>{{item.sort}}</span>
+                  </td>
+                  <td>
+                    <a class="btn btn-icon btn-success btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Edit" (click)="editPCTest(item, editTemplate)">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                    <a class="btn btn-icon btn-warning btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Subject Settings" [routerLink]="['/paid-course-meterials-subject',item.id]">
+                      <i class="fa fa-th"></i>
+                    </a>
+                    <a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="Show Question list" [routerLink]="['/paid-course-test-questions',item.id]">
+                      <i class="fa fa-eye"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngIf="allTestList.length <= 0">
+                  <td colspan="9">
+                    <span>No Data Found!</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Test Type </label>
+              <ng-select formControlName="test_type" [ngClass]="{ 'is-invalid': submitted && f.test_type.errors }"
+                  [clearable]="false" [clearOnBackspace]="false" [items]="testType" bindLabel="name"
+                  bindValue="id" placeholder="Select Type">
+              </ng-select>
+              <div *ngIf="submitted && f.test_type.errors" class="error-text">
+                <span *ngIf="f.test_type.errors.required" class="text-danger">Test Type is required</span>
+                <span *ngIf="f.test_type.errors.maxlength" class="text-danger">Test Type must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Test Name (English) </label>
+              <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                placeholder="Enter Test name" type="text" class="form-control" />
+              <div *ngIf="submitted && f.name.errors" class="error-text">
+                <span *ngIf="f.name.errors.required" class="text-danger"> Test Name is required</span>
+                <span *ngIf="f.name.errors.maxlength" class="text-danger">Test Name must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label">Test Name (Bangla) </label>
+              <input type="text" formControlName="name_bn" [ngClass]="{ 'is-invalid': submitted && f.name_bn.errors }"
+                placeholder="Enter Test name" type="text" class="form-control" />
+              <div *ngIf="submitted && f.name_bn.errors" class="error-text">
+                <span *ngIf="f.name_bn.errors.required" class="text-danger"> Test Name is required</span>
+                <span *ngIf="f.name_bn.errors.maxlength" class="text-danger">Test Name must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Description </label>
+              <input type="text" formControlName="description" [ngClass]="{ 'is-invalid': submitted && f.description.errors }"
+                placeholder="Enter Test Description" type="text" class="form-control" />
+              <div *ngIf="submitted && f.description.errors" class="error-text">
+                <span *ngIf="f.description.errors.required" class="text-danger"> Description is required</span>
+                <span *ngIf="f.description.errors.maxlength" class="text-danger">Description must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Duration </label>
+              <input type="text" formControlName="quiz_duration" [ngClass]="{ 'is-invalid': submitted && f.quiz_duration.errors }"
+                placeholder="Enter Duration" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_duration.errors" class="error-text">
+                <span *ngIf="f.quiz_duration.errors.required" class="text-danger">Duration is required</span>
+                <span *ngIf="f.quiz_duration.errors.maxlength" class="text-danger">Duration must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Positive Mark/Question </label>
+              <input type="text" formControlName="quiz_positive_mark" [ngClass]="{ 'is-invalid': submitted && f.quiz_positive_mark.errors }"
+                placeholder="Enter Positive Mark/Question" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_positive_mark.errors" class="error-text">
+                <span *ngIf="f.quiz_positive_mark.errors.required" class="text-danger">Positive Mark/Question is required</span>
+                <span *ngIf="f.quiz_positive_mark.errors.maxlength" class="text-danger">Positive Mark/Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Negative Mark/Question </label>
+              <input type="text" formControlName="quiz_negative_mark" [ngClass]="{ 'is-invalid': submitted && f.quiz_negative_mark.errors }"
+                placeholder="Enter Negative Mark/Question" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_negative_mark.errors" class="error-text">
+                <span *ngIf="f.quiz_negative_mark.errors.required" class="text-danger">Negative Mark/Question is required</span>
+                <span *ngIf="f.quiz_negative_mark.errors.maxlength" class="text-danger">Negative Mark/Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Total Marks </label>
+              <input type="text" formControlName="quiz_total_mark" [ngClass]="{ 'is-invalid': submitted && f.quiz_total_mark.errors }"
+                placeholder="Enter Total Marks" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_total_mark.errors" class="error-text">
+                <span *ngIf="f.quiz_total_mark.errors.required" class="text-danger">Total Marks is required</span>
+                <span *ngIf="f.quiz_total_mark.errors.maxlength" class="text-danger">Total Marks must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Number Of Questions</label>
+              <input formControlName="quiz_question_number" [ngClass]="{ 'is-invalid': submitted && f.quiz_question_number.errors }"
+                placeholder="Enter Number Of Questions" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_question_number.errors" class="error-text">
+                <span *ngIf="f.quiz_question_number.errors.required" class="text-danger">Number Of Questions is required</span>
+                <span *ngIf="f.quiz_question_number.errors.maxlength" class="text-danger">Number Of Questions must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Sort </label>
+              <input formControlName="sort" [ngClass]="{ 'is-invalid': submitted && f.sort.errors }"
+                placeholder="Enter Sort" type="number" class="form-control" />
+              <div *ngIf="submitted && f.sort.errors" class="error-text">
+                <span *ngIf="f.sort.errors.required" class="text-danger">Sort is required</span>
+                <span *ngIf="f.sort.errors.maxlength" class="text-danger">Sort must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Appeared From </label>
+              <input type="text" formControlName="appeared_from" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.appeared_from.errors }"
+                placeholder="Enter Starting Date" type="datetime-local" class="form-control" />
+              <div *ngIf="submitted && f.appeared_from.errors" class="error-text">
+                <span *ngIf="f.appeared_from.errors.required" class="text-danger">Appeared From is required</span>
+                <span *ngIf="f.appeared_from.errors.maxlength" class="text-danger">Appeared From must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Appeared To </label>
+              <input type="text" formControlName="appeared_to" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.appeared_to.errors }"
+                placeholder="Enter Ending Date" type="datetime-local" class="form-control" />
+              <div *ngIf="submitted && f.appeared_to.errors" class="error-text">
+                <span *ngIf="f.appeared_to.errors.required" class="text-danger">Appeared To is required</span>
+                <span *ngIf="f.appeared_to.errors.maxlength" class="text-danger">Appeared To must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <!--<div class="col-6">
+              <div class="form-group">
+                  <label class="col-form-label required"> Select Question File </label>
+                  <input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+              </div>
+          </div>
+          <div class="col-6">
+              <div class="form-group row">
+                  <div class="col-12">
+                      <div class="custom-control custom-checkbox col-form-label">
+                        <input type="checkbox" formControlName="has_schedule" class="custom-control-input" style="left: 2px !important;" [ngClass]="{ 'is-invalid': submitted && f.has_schedule.errors }" id="is_only_test">
+                        <label class="custom-control-label" for="has_schedule"> Has Schedule?</label>
+                      </div>
+                  </div>
+              </div>
+          </div>-->
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+</ng-template>
+
+<ng-template #editTemplate>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Test Type </label>
+              <ng-select formControlName="test_type" [ngClass]="{ 'is-invalid': submitted && f.test_type.errors }"
+                  [clearable]="false" [clearOnBackspace]="false" [items]="testType" bindLabel="name"
+                  bindValue="id" placeholder="Select Type">
+              </ng-select>
+              <div *ngIf="submitted && f.test_type.errors" class="error-text">
+                <span *ngIf="f.test_type.errors.required" class="text-danger">Test Type is required</span>
+                <span *ngIf="f.test_type.errors.maxlength" class="text-danger">Test Type must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Test Name (English) </label>
+              <input type="text" formControlName="name" [ngClass]="{ 'is-invalid': submitted && f.name.errors }"
+                placeholder="Enter Test name" type="text" class="form-control" />
+              <div *ngIf="submitted && f.name.errors" class="error-text">
+                <span *ngIf="f.name.errors.required" class="text-danger"> Test Name is required</span>
+                <span *ngIf="f.name.errors.maxlength" class="text-danger">Test Name must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Test Name (Bangla) </label>
+              <input type="text" formControlName="name_bn" [ngClass]="{ 'is-invalid': submitted && f.name_bn.errors }"
+                placeholder="Enter Test name" type="text" class="form-control" />
+              <div *ngIf="submitted && f.name_bn.errors" class="error-text">
+                <span *ngIf="f.name_bn.errors.required" class="text-danger"> Test Name is required</span>
+                <span *ngIf="f.name_bn.errors.maxlength" class="text-danger">Test Name must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Description </label>
+              <input type="text" formControlName="description" [ngClass]="{ 'is-invalid': submitted && f.description.errors }"
+                placeholder="Enter Test Description" type="text" class="form-control" />
+              <div *ngIf="submitted && f.description.errors" class="error-text">
+                <span *ngIf="f.description.errors.required" class="text-danger"> Description is required</span>
+                <span *ngIf="f.description.errors.maxlength" class="text-danger">Description must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Duration </label>
+              <input type="text" formControlName="quiz_duration" [ngClass]="{ 'is-invalid': submitted && f.quiz_duration.errors }"
+                placeholder="Enter Duration" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_duration.errors" class="error-text">
+                <span *ngIf="f.quiz_duration.errors.required" class="text-danger">Duration is required</span>
+                <span *ngIf="f.quiz_duration.errors.maxlength" class="text-danger">Duration must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Positive Mark/Question </label>
+              <input type="text" formControlName="quiz_positive_mark" [ngClass]="{ 'is-invalid': submitted && f.quiz_positive_mark.errors }"
+                placeholder="Enter Positive Mark/Question" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_positive_mark.errors" class="error-text">
+                <span *ngIf="f.quiz_positive_mark.errors.required" class="text-danger">Positive Mark/Question is required</span>
+                <span *ngIf="f.quiz_positive_mark.errors.maxlength" class="text-danger">Positive Mark/Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Negative Mark/Question </label>
+              <input type="text" formControlName="quiz_negative_mark" [ngClass]="{ 'is-invalid': submitted && f.quiz_negative_mark.errors }"
+                placeholder="Enter Negative Mark/Question" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_negative_mark.errors" class="error-text">
+                <span *ngIf="f.quiz_negative_mark.errors.required" class="text-danger">Negative Mark/Question is required</span>
+                <span *ngIf="f.quiz_negative_mark.errors.maxlength" class="text-danger">Negative Mark/Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Total Marks </label>
+              <input type="text" formControlName="quiz_total_mark" [ngClass]="{ 'is-invalid': submitted && f.quiz_total_mark.errors }"
+                placeholder="Enter Total Marks" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_total_mark.errors" class="error-text">
+                <span *ngIf="f.quiz_total_mark.errors.required" class="text-danger">Total Marks is required</span>
+                <span *ngIf="f.quiz_total_mark.errors.maxlength" class="text-danger">Total Marks must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Number Of Questions</label>
+              <input formControlName="quiz_question_number" [ngClass]="{ 'is-invalid': submitted && f.quiz_question_number.errors }"
+                placeholder="Enter Number Of Questions" type="number" class="form-control" />
+              <div *ngIf="submitted && f.quiz_question_number.errors" class="error-text">
+                <span *ngIf="f.quiz_question_number.errors.required" class="text-danger">Number Of Questions is required</span>
+                <span *ngIf="f.quiz_question_number.errors.maxlength" class="text-danger">Number Of Questions must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-4">
+            <div class="form-group">
+              <label class="col-form-label required">Sort </label>
+              <input formControlName="sort" [ngClass]="{ 'is-invalid': submitted && f.sort.errors }"
+                placeholder="Enter Sort" type="number" class="form-control" />
+              <div *ngIf="submitted && f.sort.errors" class="error-text">
+                <span *ngIf="f.sort.errors.required" class="text-danger">Sort is required</span>
+                <span *ngIf="f.sort.errors.maxlength" class="text-danger">Sort must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Appeared From </label>
+              <input type="text" formControlName="appeared_from" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.appeared_from.errors }"
+                placeholder="Enter Starting Date" type="datetime-local" class="form-control" />
+              <div *ngIf="submitted && f.appeared_from.errors" class="error-text">
+                <span *ngIf="f.appeared_from.errors.required" class="text-danger">Appeared From is required</span>
+                <span *ngIf="f.appeared_from.errors.maxlength" class="text-danger">Appeared From must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Appeared To </label>
+              <input type="text" formControlName="appeared_to" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.appeared_to.errors }"
+                placeholder="Enter Ending Date" type="datetime-local" class="form-control" />
+              <div *ngIf="submitted && f.appeared_to.errors" class="error-text">
+                <span *ngIf="f.appeared_to.errors.required" class="text-danger">Appeared To is required</span>
+                <span *ngIf="f.appeared_to.errors.maxlength" class="text-danger">Appeared To must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <!--<div class="col-6">
+              <div class="form-group row mt-4">
+                  <div class="col-12">
+                      <div class="custom-control custom-checkbox col-form-label">
+                        <input type="checkbox" formControlName="has_schedule" class="custom-control-input" style="left: 2px !important;" [ngClass]="{ 'is-invalid': submitted && f.has_schedule.errors }" id="is_only_test">
+                        <label class="custom-control-label" for="has_schedule"> Has Schedule?</label>
+                      </div>
+                  </div>
+              </div>
+          </div>-->
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onUpdateFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+</ng-template>
+
+<ng-template #uploadTemplate>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-sm-12" >
+              <div class="form-group">
+                  <label class="col-form-label required"> Select File </label>
+                  <input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+              </div>
+          </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onUpdateTestFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+</ng-template>

@@ -1,0 +1,132 @@
+<block-ui>
+
+  <div class="card ">
+    <div class="card-header">
+      <h5><i class="fa fa-file"></i>&nbsp;BIG TEST LIST</h5>
+      <button class="btn btn-info  float-right" (click)="openModal(template)"><i class="feather icon-plus"></i>
+        Add Big Test</button>
+
+
+    </div>
+
+    <div class="card-body">
+      <div class="row">
+        <div class="col-12">
+          <form [formGroup]="filterForm" class="row">
+            <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+              <div class="form-group">
+                <input type="text" formControlName="name" class="form-control" (keyup)='filterDatatable($event)'
+                  placeholder="Search by name" />
+              </div>
+            </div>
+
+
+          </form>
+
+        </div>
+
+      </div>
+
+      <div class="row">
+        <div class="col-12 ">
+
+          <ngx-datatable class="material table-bordered" [rows]="rows" #dataTable [loadingIndicator]="loadingIndicator"
+          [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto" [limit]="10"
+          [scrollbarH]="true">
+
+            <ngx-datatable-column [width]="80" name="Sl" prop="ID" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Big Test Name_en" prop="BigTestName_en" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+            <ngx-datatable-column name="Big Test Name_bn" prop="BigTestName_bn" [draggable]="false" [sortable]="false">
+              <ng-template let-value="value" ngx-datatable-cell-template>
+                <span title="{{ value }}"> {{ value }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+
+
+
+            <ngx-datatable-column [maxWidth]="100" name="Action" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" 
+                  ngbTooltip="Edit" (click)="getItem(row.ID,template)" >
+                  <i class="feather icon-edit"></i>
+                </button>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+
+        </div>
+
+
+
+      </div>
+
+    </div>
+  </div>
+
+
+  <ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">English Name </label>
+              <input type="text" formControlName="English" [ngClass]="{ 'is-invalid': submitted && f.English.errors }"
+                placeholder="Enter name in english." type="text" class="form-control" />
+              <div *ngIf="submitted && f.English.errors" class="error-text">
+                <span *ngIf="f.English.errors.required" class="text-danger"> English name is
+                  required</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Bangla Name </label>
+              <input type="text" formControlName="Bangla" [ngClass]="{ 'is-invalid': submitted && f.Bangla.errors }"
+                placeholder="Enter name in bangla." type="text" class="form-control" />
+              <div *ngIf="submitted && f.Bangla.errors" class="error-text">
+                <span *ngIf="f.Bangla.errors.required" class="text-danger">
+                  Bangla name is required
+                </span>
+
+              </div>
+            </div>
+          </div>
+
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>
+        Close</button>
+
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>
+        {{btnSaveText}}</button>
+    </div>
+  </ng-template>
+
+</block-ui>

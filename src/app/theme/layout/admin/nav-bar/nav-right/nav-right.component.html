@@ -1,0 +1,107 @@
+<ul class="navbar-nav ml-auto">
+  <!-- <li>
+    <a href="https://github.com/phoenixcoded/flat-able-free-angular-admin-template" target="_blank" class="">
+      <i class="icon feather icon-github pulse-button"></i>
+    </a>
+  </li> -->
+  <!-- <li>
+    <div class="dropdown" ngbDropdown placement="auto">
+      <a ngbDropdownToggle href="javascript:">
+        <i class="icon feather icon-bell"></i>
+        <span *ngIf="unseenTotal > 0" class="badge badge-pill badge-danger">{{unseenTotal}}</span>
+      </a>
+      <div ngbDropdownMenu class="dropdown-menu-right notification">
+        <div class="noti-head">
+          <h6 class="d-inline-block m-b-0">Notifications</h6>
+        </div>
+        <ul class="noti-body">
+          <li class="notification" *ngFor="let item of notifications" [ngClass]="{'bg-white': item.Seen}" (click)="onClickNotification(item)">
+            <div class="media">
+              <div class="media-body">
+                <p><strong>{{item.Title}}</strong><span class="n-time text-muted"><i
+                      class="icon feather icon-clock m-r-10"></i>{{item.CreatedOn | amFromUtc | amLocal | amDateFormat: 'YYYY-MM-DD h:mm:ss a' | amTimeAgo}}</span></p>
+                <p>{{item.Details}}</p>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="noti-footer" *ngIf="page.totalPages > page.pageNumber+1">
+          <a href="javascript:" (click)="showMore()">show more</a>
+        </div>
+      </div>
+    </div>
+  </li> -->
+  <!-- <li>
+    <div class="dropdown" ngbDropdown placement="auto">
+      <a ngbDropdownToggle href="javascript:">
+        <i class="icon feather icon-bell"></i>
+        <span *ngIf="unseenTotal > 0" class="badge badge-pill badge-danger">{{unseenTotal}}</span>
+      </a>
+      <div ngbDropdownMenu class="dropdown-menu-right notification">
+        <div class="noti-head">
+          <h6 class="d-inline-block m-b-0">Notifications</h6>
+       
+        </div>
+        <ul class="noti-body">
+       
+          <li ngbDropdownItem class="notification text-wrap bg-white" *ngFor="let item of notifications" [ngClass]="{'unseen': !item.Seen}"
+            (click)="onClickNotification(item)">
+            <span class="unseen-badge" *ngIf="!item.Seen"></span>
+            <div  class="media">
+             
+              <div  class="media-body" *ngIf="notifications.length>0">
+                <p ><strong >{{item.Title}}</strong><span class="n-time text-muted"><i
+                      class="icon feather icon-clock m-r-10"></i>{{item.CreatedOn  | amTimeAgo}}</span></p>
+                <p>{{item.Details}}</p>
+              </div>
+              <div class="media-body" *ngIf="notifications.length<=0">
+                <p><strong>No notification found.</strong></p>
+              </div>
+            </div>
+          </li>
+        
+        </ul>
+        <div ngbDropdownItem class="noti-footer" *ngIf="page.totalPages > page.pageNumber+1">
+          <a  href="javascript:" [routerLink]="['/notification-list']" routerLinkActive="router-link-active" >show more</a>
+        </div>
+      </div>
+    </div>
+  </li> -->
+  <li>
+    <div class="drp-user dropdown" ngbDropdown placement="auto">
+      <!-- <span class="badge badge-pill badge-success mr-2"> {{requests}}</span> -->
+      <a href="javascript:" ngbDropdownToggle>
+
+        {{currentUser.FullName}} <div class="d-inline-block align-middle">
+
+          <img src="assets/images/user/user-avatar-blank.png" alt="user image" class="img-radius wid-40 align-top m-l-10 mt-2" />
+
+          <!--<img *ngIf="!currentUser.ImagePath && !currentUser.Gender" src="assets/images/user/user-avatar-blank.png"
+            alt="user image" class="img-radius wid-40 align-top m-l-10 mt-2" />
+
+          <img *ngIf="!currentUser.ImagePath && currentUser.Gender=='Others'" src="assets/images/user/other.jpg"
+            alt="user image" class="img-radius wid-40 align-top m-l-10 mt-2" />
+
+          <img *ngIf="!currentUser.ImagePath && currentUser.Gender=='Male'" src="assets/images/user/male.jpg"
+            alt="user image" class="img-radius wid-40 align-top m-l-10 mt-2" />
+
+          <img *ngIf="!currentUser.ImagePath && currentUser.Gender=='Female'" src="assets/images/user/female.jpg"
+            alt="user image" class="img-radius wid-40 align-top m-l-10 mt-2" />
+
+          <img *ngIf="currentUser.ImagePath" src="{{baseUrl}}{{currentUser.ImagePath}}" alt="user image"
+            class="img-radius wid-40 align-top m-l-10 mt-2" />-->
+        </div>
+      </a>
+      <div class=" dropdown-menu-right profile-notification" ngbDropdownMenu>
+
+        <ul class="pro-body">
+          <li><a [routerLink]="['/profile']" class="dropdown-item"><i class="feather icon-user"></i> Profile</a></li>
+          <li><a [routerLink]="['/change-password']" class="dropdown-item"><i class="feather icon-lock"></i> Change
+              Password</a></li>
+          <li><a href="javascript:" class="dropdown-item" (click)="logout()"><i class="feather icon-log-out"></i>
+              Logout</a></li>
+        </ul>
+      </div>
+    </div>
+  </li>
+</ul>
