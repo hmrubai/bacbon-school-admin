@@ -79,7 +79,11 @@ const routes: Routes = [
         loadChildren: () => import('./paid-course-mentors/paid-course-mentors.module').then(module => module.PaidCourseMentorsModule),
         canActivate: [AuthGuard]
       },
-      
+      {
+        path: 'paid-course-se-matching/:paid_course_id',
+        loadChildren: () => import('./paid-course-se-matching/paid-course-se-matching.module').then(module => module.PaidCourseSEMacthingModule),
+        canActivate: [AuthGuard]
+      },
       {
         path: 'paid-course-results',
         loadChildren: () => import('./paid-course-results/paid-course-results.module').then(module => module.PaidCourseResultsModule),

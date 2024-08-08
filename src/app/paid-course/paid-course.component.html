@@ -22,7 +22,7 @@
                   <th scope="col">Course Name</th>
                   <th scope="col">From</th>
                   <th scope="col">To</th>
-                  <th scope="col">Sort</th>
+                  <!-- <th scope="col">Sort</th> -->
                   <th scope="col">Status</th>
                   <th scope="col">Details</th>
                 </tr>
@@ -41,9 +41,9 @@
                   <td>
                     <span>{{item.appeared_to | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A'}}</span>
                   </td>
-                  <td>
+                  <!-- <td>
                     <span>{{item.sort}}</span>
-                  </td>
+                  </td> -->
                   <td>
                     <span *ngIf="!item.is_active" class="btn btn-mini col-sm-12 btn-warning"> Inactive</span>
                     <span *ngIf="item.is_active" class="btn btn-mini col-sm-12 btn-success"> Active</span>
@@ -60,6 +60,9 @@
                     </a>
                     <a class="btn btn-icon btn-warning btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="All Mentor List" [routerLink]="['/paid-course-mentors',item.id]">
                       <i class="fa fa-users"></i>
+                    </a>
+                    <a class="btn btn-icon btn-secondary bg-secondary btn-mini ml-1 mb-1" [placement]="'top'" ngbTooltip="Mapping/Matching" [routerLink]="['/paid-course-se-matching',item.id]">
+                      <i class="fa fa-user"></i>
                     </a>
                     
                     <!--<a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" *ngIf="item.total_participated <= 0" [placement]="'bottom'" ngbTooltip="Delete"

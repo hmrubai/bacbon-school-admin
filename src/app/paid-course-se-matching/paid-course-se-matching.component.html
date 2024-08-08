@@ -1,0 +1,159 @@
+<block-ui>
+
+  <div class="row ">
+    <div class="col-12 ">
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-10 col-12">
+            <h5>PAID COURSE - EXPERT-STUDENT MATCHING</h5>
+          </div>
+          <div class="col-md-2 col-12 text-right">
+            <button class="btn btn-secondary btn-mini float-right" [placement]="'left'" ngbTooltip="Back" (click)="backToLocation()">
+              <i class="fa fa-arrow-circle-left "></i> Back 
+            </button>
+            <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Match Student" (click)="openModal(template)">
+              <i class="fa fa-plus"></i> Match Student
+            </button>
+            </div>
+        </div>
+        <div class="card-body p-0">
+          <div class="table-responsive">
+            <table class="table table-sm table-hover table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"># </th>
+                  <th scope="col">Expert</th>
+                  <th scope="col">Student</th>
+                  <th scope="col">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of allMappingList; let i=index">
+                  <td>{{i+1}}</td>
+                  <td>
+                      <strong>{{item.mentor_name}}</strong> <i> ({{ item.mentor_mobile_number }})</i> 
+                  </td>
+                  <td>
+                    <strong>{{item.student_name}}</strong> <i> ({{ item.student_mobile_number }})</i> 
+                  </td>
+                  <td>
+                    <a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Delete" (click)="deleteMapping(item)">
+                      <i class="fa fa-trash"></i>
+                    </a>
+                  </td>
+                </tr>
+                <tr *ngIf="allMappingList.length <= 0">
+                  <td colspan="5">
+                    <span>No Data Found!</span>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left" [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="featuresForm">
+        <div class="row">
+          <div class="col-6">
+            <div class="form-group">
+                <label class="col-form-label required">Select Expert </label>
+                <ng-select formControlName="mentor_id" [ngClass]="{ 'is-invalid': submitted && ff.mentor_id.errors }"
+                    [clearable]="false" [clearOnBackspace]="false" [items]="paidCourseMentorList" bindLabel="name"
+                    bindValue="id" placeholder="Select Expert">
+                </ng-select>
+                <div *ngIf="submitted && ff.mentor_id.errors" class="error-text">
+                    <span *ngIf="ff.mentor_id.errors.required" class="text-danger">Expert is required</span>
+                    <span *ngIf="ff.mentor_id.errors.maxlength" class="text-danger">Expert must be within 250 characters</span>
+                </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+                <label class="col-form-label required">Select Student </label>
+                <ng-select formControlName="student_id" [ngClass]="{ 'is-invalid': submitted && ff.student_id.errors }"
+                    [clearable]="false" [clearOnBackspace]="false" [items]="paidCourseStudentList" bindLabel="name"
+                    bindValue="id" placeholder="Select Student">
+                </ng-select>
+                <div *ngIf="submitted && ff.student_id.errors" class="error-text">
+                    <span *ngIf="ff.student_id.errors.required" class="text-danger">Student is required</span>
+                    <span *ngIf="ff.student_id.errors.maxlength" class="text-danger">Student must be within 250 characters</span>
+                </div>
+            </div>
+          </div>
+          
+          <div class="col-12">
+            <div class="form-group">
+                <button class="btn btn-success btn-mini float-right" [placement]="'left'" ngbTooltip="Add to list" (click)="addToList()">
+                  <i class="fa fa-plus"></i> Add to list
+                </button>
+            </div>
+          </div>
+
+          <div class="col-12">
+            
+            <h3 class="mb-0"><i class="fa fa-users"></i>&nbsp; Mapping List</h3>
+            <hr>
+            <ul class="list">
+                <li class="list-item" style="list-style-type: none;" *ngIf="mappingList.length > 0">
+                    <div class="row mt-1">
+                        <div class="col-lg-11">
+                          <div class="row">
+                            <div class="col-6">
+                              <strong>Mentor</strong>
+                            </div>
+                            <div class="col-6">
+                              <strong>Student</strong>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-lg-1">
+                            <strong class="mr-2">Action</strong>
+                        </div>
+                    </div>
+                    <hr/>
+                </li>
+                <li class="list-item" *ngFor="let item of mappingList; let i=index">
+                    <div class="row mt-1">
+                        <div class="col-lg-11">
+                          <div class="row">
+                            <div class="col-6">
+                              <strong>{{ item.mentor_name }} </strong> <i> ({{ item.mentor_mobile_number }})</i> 
+                            </div>
+                            <div class="col-6">
+                              <strong>{{ item.student_name }} </strong> <i> ({{ item.student_mobile_number }})</i>
+                            </div>
+                          </div>
+                           <!--{{ item.mentor_name }} ({{ item.mentor_mobile_number }})  -  {{ item.student_name }} ({{ item.student_mobile_number }})-->
+                        </div>
+                        <div class="col-lg-1">
+                            <button class="btn btn-danger btn-sm" (click)="removeMappingList(i)"><i class="fa fa-trash"></i></button>
+                        </div>
+                    </div>
+                </li>
+                <li class="list-item" *ngIf="mappingList.length <= 0">
+                  No data found! 
+                </li>
+            </ul>
+        </div>
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onMappingSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+  </ng-template>
