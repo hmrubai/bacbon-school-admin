@@ -164,24 +164,24 @@ const NavigationItems = [
         icon: 'fas fa-users',
         //permission: 'MasterSettings'
       },
-      {
-        id: 'student-lc-enable',
-        title: 'Student LC Enable',
-        type: 'item',
-        url: '/student-lc-enable',
-        classes: 'nav-item',
-        icon: 'fas fa-user-plus',
-        //permission: 'MasterSettings'
-      },
-      {
-        id: 'student-mappting',
-        title: 'Student Matching',
-        type: 'item',
-        url: '/coupon-uses-history',
-        classes: 'nav-item',
-        icon: 'fas fa-user-circle',
-        //permission: 'MasterSettings'
-      },
+      // {
+      //   id: 'student-lc-enable',
+      //   title: 'Student LC Enable',
+      //   type: 'item',
+      //   url: '/student-lc-enable',
+      //   classes: 'nav-item',
+      //   icon: 'fas fa-user-plus',
+      //   //permission: 'MasterSettings'
+      // },
+      // {
+      //   id: 'student-mappting',
+      //   title: 'Student Matching',
+      //   type: 'item',
+      //   url: '/coupon-uses-history',
+      //   classes: 'nav-item',
+      //   icon: 'fas fa-user-circle',
+      //   //permission: 'MasterSettings'
+      // },
     
     ]
   },

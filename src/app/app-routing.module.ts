@@ -85,6 +85,11 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'paid-course-lc-activate/:paid_course_id',
+        loadChildren: () => import('./paid-course-lc-activate/paid-course-lc-activate.module').then(module => module.PaidCourseLCActivateModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'paid-course-results',
         loadChildren: () => import('./paid-course-results/paid-course-results.module').then(module => module.PaidCourseResultsModule),
         canActivate: [AuthGuard]
