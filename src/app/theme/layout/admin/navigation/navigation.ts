@@ -164,15 +164,15 @@ const NavigationItems = [
         icon: 'fas fa-users',
         //permission: 'MasterSettings'
       },
-      // {
-      //   id: 'student-lc-enable',
-      //   title: 'Student LC Enable',
-      //   type: 'item',
-      //   url: '/student-lc-enable',
-      //   classes: 'nav-item',
-      //   icon: 'fas fa-user-plus',
-      //   //permission: 'MasterSettings'
-      // },
+      {
+        id: 'paid-course-completed-class',
+        title: 'LC Completed Class',
+        type: 'item',
+        url: '/paid-course-completed-class',
+        classes: 'nav-item',
+        icon: 'fas fa-list',
+        //permission: 'MasterSettings'
+      },
       // {
       //   id: 'student-mappting',
       //   title: 'Student Matching',

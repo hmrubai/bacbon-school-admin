@@ -95,6 +95,11 @@ const routes: Routes = [
         canActivate: [AuthGuard]
       },
       {
+        path: 'paid-course-completed-class',
+        loadChildren: () => import('./paid-course-completed-class/paid-course-completed-class.module').then(module => module.PaidCourseCompletedClassModule),
+        canActivate: [AuthGuard]
+      },
+      {
         path: 'paid-course-quota',
         loadChildren: () => import('./paid-course-quota/paid-course-quota.module').then(module => module.PaidCourseQuotaModule),
         canActivate: [AuthGuard]

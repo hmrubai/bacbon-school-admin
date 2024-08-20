@@ -1,0 +1,251 @@
+<block-ui>
+
+  <div class="row ">
+    <div class="col-12 ">
+      <div class="card mb-0">
+        <div class="card-header row">
+          <div class="col-md-4 col-12">
+            <h5>LC Completed Class</h5>
+          </div>
+          <div class="col-md-3 col-12 text-right">
+            <ng-select [clearable]="true" [clearOnBackspace]="false" (change)="changePaidCourse($event)" [items]="allPaidCourseList" bindLabel="name"
+                bindValue="id" placeholder="Select Paid Course">
+                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span><strong>{{ item.name }}</strong>  (<strong>{{ item.sales_amount }}</strong> ৳)</span>
+                </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-4 col-12 text-right">
+            <ng-select [clearable]="true" [clearOnBackspace]="false" [(ngModel)]="meterial_form" (change)="filterResultList($event)" [items]="allPaidCourseMeterialList" bindLabel="name"
+                bindValue="id" placeholder="Select Test">
+                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                    <span><strong>{{ item.name }}</strong></span>
+                </ng-template>
+            </ng-select>
+          </div>
+          <div class="col-md-1 col-12">
+            <button class="btn btn-secondary" disabled *ngIf="!is_meterial_selected">Download</button>
+            <button class="btn btn-success" (click)="downloadResult()" *ngIf="is_meterial_selected">Download</button>
+          </div>
+        </div>
+        <div class="card-body p-0">
+
+          <ngx-datatable class="material table-bordered" [rows]="paidCourseResultList" #dataTable [loadingIndicator]="loadingIndicator"
+            [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto" [limit]="10"
+            [scrollbarH]="true">
+
+            <ngx-datatable-column [maxWidth]="100" name="Sl" prop="Id" [draggable]="false" [sortable]="false">
+              <ng-template let-row="row" let-rowIndex="rowIndex" ngx-datatable-cell-template>
+                <span> {{ (page.pageNumber * page.size) + rowIndex + 1 }} </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Merit Position" [maxWidth]="150" [draggable]="false" [sortable]="false" cellClass="text-left">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span><strong>{{row.position}}</strong></span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Name" [minWidth]="450" [draggable]="false" [sortable]="false" cellClass="text-left">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a [placement]="'right'" ngbTooltip="User Details" href="javascript:">
+                  <strong>{{row.user_name}}</strong><br/>{{ row.email }}<br/>{{ row.phone }}
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Achieved Mark" [minWidth]="150" prop="mark" [draggable]="false"
+              [sortable]="false">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span title="{{ row.total_achieved_mark }}"> <strong>{{ row.total_achieved_mark }}</strong> </span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Date" [maxWidth]="170" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span><strong>{{ row.created_at | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A' }}</strong></span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column [maxWidth]="150" name="Action" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" *ngIf="row.written_exam_mark > 0" [routerLink]="['/written-result',row.id]" ngbTooltip="Written Details" href="javascript:">
+                  <i class="fa fa-file-alt"></i>
+                </a>
+                <a class="btn btn-icon btn-success btn-mini ml-1 mb-1" [placement]="'left'" (click)="getSubjectWiseResult(row, resultTemplate)" ngbTooltip="See Subject Wise Result" href="javascript:">
+                  <i class="fa fa-file-alt"></i>
+                </a>
+              </ng-template>
+            </ngx-datatable-column>
+
+          </ngx-datatable>
+
+        </div>
+      </div>
+    </div>
+  </div>
+  <br>
+</block-ui>
+
+<ng-template #template>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " [innerHtml]="modalTitle" id="modalTitle"></h4>
+      <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <form [formGroup]="entryForm">
+        <div class="row">
+          <div class="col-12">
+            <div class="form-group">
+              <label class="col-form-label required">Test Name </label>
+              <input type="text" formControlName="exam_name" [ngClass]="{ 'is-invalid': submitted && f.exam_name.errors }"
+                placeholder="Enter Selection Test name" type="text" class="form-control" />
+              <div *ngIf="submitted && f.exam_name.errors" class="error-text">
+                <span *ngIf="f.exam_name.errors.required" class="text-danger"> Test Name is required</span>
+                <span *ngIf="f.exam_name.errors.maxlength" class="text-danger">Test Name must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Duration </label>
+              <input type="text" formControlName="duration" [ngClass]="{ 'is-invalid': submitted && f.duration.errors }"
+                placeholder="Enter Duration" type="number" class="form-control" />
+              <div *ngIf="submitted && f.duration.errors" class="error-text">
+                <span *ngIf="f.duration.errors.required" class="text-danger">Duration is required</span>
+                <span *ngIf="f.duration.errors.maxlength" class="text-danger">Duration must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Positive Mark/Question </label>
+              <input type="text" formControlName="positive_mark" [ngClass]="{ 'is-invalid': submitted && f.positive_mark.errors }"
+                placeholder="Enter Positive Mark/Question" type="number" class="form-control" />
+              <div *ngIf="submitted && f.positive_mark.errors" class="error-text">
+                <span *ngIf="f.positive_mark.errors.required" class="text-danger">Positive Mark/Question is required</span>
+                <span *ngIf="f.positive_mark.errors.maxlength" class="text-danger">Positive Mark/Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Negative Mark/Question </label>
+              <input type="text" formControlName="negative_mark" [ngClass]="{ 'is-invalid': submitted && f.negative_mark.errors }"
+                placeholder="Enter Negative Mark/Question" type="number" class="form-control" />
+              <div *ngIf="submitted && f.negative_mark.errors" class="error-text">
+                <span *ngIf="f.negative_mark.errors.required" class="text-danger">Negative Mark/Question is required</span>
+                <span *ngIf="f.negative_mark.errors.maxlength" class="text-danger">Negative Mark/Question must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Total Marks </label>
+              <input type="text" formControlName="total_mark" [ngClass]="{ 'is-invalid': submitted && f.total_mark.errors }"
+                placeholder="Enter Total Marks" type="number" class="form-control" />
+              <div *ngIf="submitted && f.total_mark.errors" class="error-text">
+                <span *ngIf="f.total_mark.errors.required" class="text-danger">Total Marks is required</span>
+                <span *ngIf="f.total_mark.errors.maxlength" class="text-danger">Total Marks must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <!--<div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Number of Total Questions </label>
+              <input type="text" formControlName="question_number" [ngClass]="{ 'is-invalid': submitted && f.question_number.errors }"
+                placeholder="Enter Number of Total Questions" type="number" class="form-control" />
+              <div *ngIf="submitted && f.question_number.errors" class="error-text">
+                <span *ngIf="f.question_number.errors.required" class="text-danger">Number of Total Questions is required</span>
+                <span *ngIf="f.question_number.errors.maxlength" class="text-danger">Number of Total Questions must be within 250 characters</span>
+              </div>
+            </div>
+          </div>-->
+          
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Appeared From </label>
+              <input type="text" formControlName="appeared_from" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.appeared_from.errors }"
+                placeholder="Enter Starting Date" type="datetime-local" class="form-control" />
+              <div *ngIf="submitted && f.appeared_from.errors" class="error-text">
+                <span *ngIf="f.appeared_from.errors.required" class="text-danger">Appeared From is required</span>
+                <span *ngIf="f.appeared_from.errors.maxlength" class="text-danger">Appeared From must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+          <div class="col-6">
+            <div class="form-group">
+              <label class="col-form-label required">Appeared To </label>
+              <input type="text" formControlName="appeared_to" [min]="minDate" [ngClass]="{ 'is-invalid': submitted && f.appeared_to.errors }"
+                placeholder="Enter Ending Date" type="datetime-local" class="form-control" />
+              <div *ngIf="submitted && f.appeared_to.errors" class="error-text">
+                <span *ngIf="f.appeared_to.errors.required" class="text-danger">Appeared To is required</span>
+                <span *ngIf="f.appeared_to.errors.maxlength" class="text-danger">Appeared To must be within 250 characters</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </form>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+</ng-template>
+
+<ng-template #resultTemplate>
+    <div class="modal-header ">
+      <i class="fa fa-file m-1"></i>
+      <h4 class="modal-title pull-left " id="modalTitle">Subject Wise Result Details</h4>
+      <button type="button " class="close pull-right " aria-label="Close" (click)="modalHide()">
+        <i class="feather icon-x"></i>
+      </button>
+    </div>
+    <div class="modal-body">
+      <div class="row">
+        <div class="col-lg-12">
+          <table class="table table-sm table-hover table-bordered table-striped">
+              <thead>
+                <tr>
+                  <th scope="col"># </th>
+                  <th scope="col">Subject Name</th>
+                  <th scope="col">Number of Questions</th>
+                  <th scope="col">Positive Count</th>
+                  <th scope="col">Negetive Count</th>
+                  <th scope="col">Not Answered</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of subjectWiseResult; let i=index">
+                  <td>{{i+1}}</td>
+                  <td> 
+                    <strong>{{item.subject_name}}</strong>
+                  </td>
+                  <td> <strong><span>{{item.number_of_questions}}</span></strong> </td>
+                  <td> 
+                    <strong>{{item.positive_count}}</strong>
+                  </td>
+                  <td> <span>{{item.negetive_count}}</span> </td>
+                  <td> <strong><span>{{item.number_of_questions - (item.positive_count + item.negetive_count)}}</span></strong> </td>
+                </tr>
+                <tr *ngIf="subjectWiseResult.length <= 0">
+                  <td colspan="6"> 
+                    <strong>No Item Found</strong>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+        </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+      <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+    </div>
+</ng-template>

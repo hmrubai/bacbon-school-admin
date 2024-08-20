@@ -48,6 +48,8 @@ export class DashboardComponent implements OnInit {
    bigTest = 0;
    itemsPerSlide = 4;
    is_loaded = false;
+   is_analytics_loaded = false;
+   is_graph_loaded = false;
 
    rows = [];
    classes = [];
@@ -63,6 +65,13 @@ export class DashboardComponent implements OnInit {
    locationChartOptions: any;
    durationChartOptions: any;
 
+   paymentChartOptions: Highcharts.Options;
+
+   dashboardAnlytics: any;
+   courseAnalytics: any;
+   paymentData: any;
+   paymentGraph: any;
+
    constructor(
       private _service: CommonService,
       private toastr: ToastrService,
@@ -76,13 +85,73 @@ export class DashboardComponent implements OnInit {
 
    ngOnInit() {
       this.getAllCount();
+      this.getAnalytics();
+      this.getPaymentAnalytics();
    }
 
    getAllCount() {
       this._service.get('selectionTestSummary').subscribe(res => {
          this.counter = res.result;
-         console.log(this.counter)
+         //console.log(this.counter)
          this.is_loaded = true;
+      }, err => {
+         this.toastr.warning(err.messaages || err, 'Warning!', { closeButton: true, disableTimeOut: false });
+      });
+   }
+
+   getAnalytics() {
+      this._service.get('dashboard-analytics').subscribe(res => {
+         this.dashboardAnlytics = res.result;
+         this.courseAnalytics = res.result.course;
+         this.paymentData = res.result.payment;
+         this.is_analytics_loaded = true;
+
+         //console.log(this.paymentData)
+
+         this.is_loaded = true;
+      }, err => {
+         this.toastr.warning(err.messaages || err, 'Warning!', { closeButton: true, disableTimeOut: false });
+      });
+   }
+
+   getPaymentAnalytics() {
+      this._service.get('payment-analytics').subscribe(res => {
+         this.paymentGraph = res.result.monthly_purchases;
+         console.log(this.paymentGraph)
+
+         // Extracting months and amounts for Highcharts
+         const categories = Object.keys(this.paymentGraph); // ['2024-03', '2024-04', '2024-05', '2024-06', '2024-07', '2024-08']
+         const data = Object.values(this.paymentGraph); // [1200, 1400, 0, 2000, 0, 3000]
+
+         this.paymentChartOptions = {
+            chart: {
+               type: 'column'
+            },
+            title: {
+               text: 'Monthly Purchase Amounts'
+            },
+            xAxis: {
+               categories: categories,
+               title: {
+                  text: 'Month'
+               }
+            },
+            yAxis: {
+               title: {
+                  text: 'Amount'
+               }
+            },
+            series: [
+               {
+                  name: 'Monthly Purchase Amounts',
+                  data: data,
+                  type: 'column',
+                  color: '#1e24d0'
+               }
+            ]
+         };
+
+         this.is_graph_loaded = true;
       }, err => {
          this.toastr.warning(err.messaages || err, 'Warning!', { closeButton: true, disableTimeOut: false });
       });
@@ -171,7 +240,7 @@ export class DashboardComponent implements OnInit {
                name: element.Name
             };
             dataArr.push(data);
-           // console.log(data)
+            // console.log(data)
          });
          item.ChartOptions = {
             chart: {
