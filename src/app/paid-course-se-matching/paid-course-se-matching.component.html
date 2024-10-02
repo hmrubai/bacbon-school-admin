@@ -72,8 +72,11 @@
             <div class="form-group">
                 <label class="col-form-label required">Select Expert </label>
                 <ng-select formControlName="mentor_id" [ngClass]="{ 'is-invalid': submitted && ff.mentor_id.errors }"
-                    [clearable]="false" [clearOnBackspace]="false" [items]="paidCourseMentorList" bindLabel="name"
+                    [clearable]="false" [clearOnBackspace]="false" [items]="paidCourseMentorList" bindLabel="name" [searchFn]="customSearchFn"
                     bindValue="id" placeholder="Select Expert">
+                    <ng-template  ng-option-tmp let-item="item">
+                        <b>{{item.name}} - ({{ item.mobile_number }})</b>
+                    </ng-template>
                 </ng-select>
                 <div *ngIf="submitted && ff.mentor_id.errors" class="error-text">
                     <span *ngIf="ff.mentor_id.errors.required" class="text-danger">Expert is required</span>
@@ -85,8 +88,11 @@
             <div class="form-group">
                 <label class="col-form-label required">Select Student </label>
                 <ng-select formControlName="student_id" [ngClass]="{ 'is-invalid': submitted && ff.student_id.errors }"
-                    [clearable]="false" [clearOnBackspace]="false" [items]="paidCourseStudentList" bindLabel="name"
+                    [clearable]="false" [clearOnBackspace]="false" [items]="paidCourseStudentList" bindLabel="name" [searchFn]="customSearchFn"
                     bindValue="id" placeholder="Select Student">
+                    <ng-template  ng-option-tmp let-item="item">
+                        <b>{{item.name}} - ({{ item.mobile_number }})</b>
+                    </ng-template>
                 </ng-select>
                 <div *ngIf="submitted && ff.student_id.errors" class="error-text">
                     <span *ngIf="ff.student_id.errors.required" class="text-danger">Student is required</span>

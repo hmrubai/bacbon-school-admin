@@ -14,6 +14,8 @@
             <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Add New Expert" (click)="openModal(template)">
               <i class="fa fa-plus"></i> Add New Expert
             </button>
+            <!--<button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Upload Expert" (click)="openModal(UploadExpertTemplate)">
+              <i class="fa fa-arrow-circle-up"></i> Upload Expert</button>-->
             </div>
         </div>
         <div class="card-body p-0">
@@ -76,8 +78,11 @@
             <div class="form-group">
                 <label class="col-form-label required">Select Expert </label>
                 <ng-select formControlName="mentor_id" (change)="selectExpert($event)" [ngClass]="{ 'is-invalid': submitted && ff.mentor_id.errors }"
-                    [clearable]="false" [clearOnBackspace]="false" [items]="allMentorList" bindLabel="name"
+                    [clearable]="false" [clearOnBackspace]="false" [items]="allMentorList" [searchFn]="customSearchFn"
                     bindValue="id" placeholder="Select Expert">
+                    <ng-template  ng-option-tmp let-item="item">
+                        <b>{{item.name}} - ({{ item.mobile_number }})</b>
+                    </ng-template>
                 </ng-select>
                 <div *ngIf="submitted && ff.mentor_id.errors" class="error-text">
                     <span *ngIf="ff.mentor_id.errors.required" class="text-danger">Expert is required</span>
@@ -113,3 +118,74 @@
       <button class="btn btn-success btn-sm" (click)="onSelectedMentorSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
     </div>
   </ng-template>
+
+  <ng-template #UploadExpertTemplate>
+    <div class="modal-header ">
+        <h4 class="modal-title pull-left">Upload Expert</h4>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+            <i class="feather icon-x"></i>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <app-card>
+          <form [formGroup]="uploadMCQForm">
+            <div class="row">
+                <div class="col-sm-12" >
+                    <div class="form-group">
+                        <label class="col-form-label required"> Select File </label>
+                        <input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    </div>
+                </div>
+            </div>
+          </form>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col"># </th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of uploadableExport | slice: 0:4; let i=index">
+                        <td>{{i+1}}</td>
+                        <td> 
+                          <strong>{{item.name}}</strong>
+                        </td>
+                        <td> 
+                          <strong>{{item.mobile}}</strong>
+                        </td>
+                        <td> 
+                          <strong> {{item.email}}</strong>
+                        </td>
+                        <td>
+                          <a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Delete" (click)="removeFromExpertList(i)">
+                            <i class="fa fa-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr *ngIf="uploadableExport.length <= 0">
+                        <td colspan="5"> 
+                          <strong>No Item Found</strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+
+        </app-card>
+    </div>
+    <div class="modal-footer">
+        <div class="pr-4">
+            <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+            <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+        </div>
+    </div>
+</ng-template>

@@ -7,30 +7,40 @@
           <div class="col-md-4 col-12">
             <h5>LC Completed Class</h5>
           </div>
-          <div class="col-md-3 col-12 text-right">
-            <ng-select [clearable]="true" [clearOnBackspace]="false" (change)="changePaidCourse($event)" [items]="allPaidCourseList" bindLabel="name"
-                bindValue="id" placeholder="Select Paid Course">
-                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                    <span><strong>{{ item.name }}</strong>  (<strong>{{ item.sales_amount }}</strong> ৳)</span>
-                </ng-template>
-            </ng-select>
-          </div>
-          <div class="col-md-4 col-12 text-right">
-            <ng-select [clearable]="true" [clearOnBackspace]="false" [(ngModel)]="meterial_form" (change)="filterResultList($event)" [items]="allPaidCourseMeterialList" bindLabel="name"
-                bindValue="id" placeholder="Select Test">
-                <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
-                    <span><strong>{{ item.name }}</strong></span>
-                </ng-template>
-            </ng-select>
-          </div>
-          <div class="col-md-1 col-12">
-            <button class="btn btn-secondary" disabled *ngIf="!is_meterial_selected">Download</button>
-            <button class="btn btn-success" (click)="downloadResult()" *ngIf="is_meterial_selected">Download</button>
-          </div>
         </div>
         <div class="card-body p-0">
+          <div class="row mt-3 mb-3">
+            <div class="col-md-3 col-12 ml-2 text-right">
+              <ng-select [clearable]="true" [clearOnBackspace]="false" [(ngModel)]="selected_course" (change)="changePaidCourse($event)" [items]="allPaidCourseList" bindLabel="name"
+                  bindValue="id" placeholder="Select Paid Course">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                      <span><strong>{{ item.name }}</strong>  (<strong>{{ item.sales_amount }}</strong> ৳)</span>
+                  </ng-template>
+              </ng-select>
+            </div>
+            <div class="col-md-2 col-12 text-right">
+              <ng-select [clearable]="true" [clearOnBackspace]="false" [(ngModel)]="selected_mentor" (change)="changeFilterDate($event)" [items]="mentorList" bindLabel="name"
+                  bindValue="user_id" placeholder="Select Mentor">
+                  <ng-template ng-option-tmp let-item="item" let-index="index" let-search="searchTerm">
+                      <span><strong>{{ item.name }}</strong> ({{ item.mobile_number }})</span>
+                  </ng-template>
+              </ng-select>
+            </div>
+            <div class="col-md-2 col-12 text-right">
+              <input type="text" placeholder="Select Start Date" (change)="changeFilterDate($event)" [(ngModel)]="start_date" type="date" class="form-control" />
+            </div>
+            <div class="col-md-2 col-12 text-right">
+              <input type="text" placeholder="Select End Date" (change)="changeFilterDate($event)" [(ngModel)]="end_date" type="date" class="form-control" />
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-md-6 col-12 ml-2 mb-3">
+              <button class="btn btn-info" ><strong>Total Time: {{ total_class_time }}</strong></button>
+              <button class="btn btn-success ml-2" ><strong>Actual Time: {{ actual_total_time }}</strong></button>
+            </div>
+          </div>
 
-          <ngx-datatable class="material table-bordered" [rows]="paidCourseResultList" #dataTable [loadingIndicator]="loadingIndicator"
+          <ngx-datatable class="material table-bordered" [rows]="classList" #dataTable [loadingIndicator]="loadingIndicator"
             [columnMode]="ColumnMode.force" [headerHeight]="40" [footerHeight]="50" rowHeight="auto" [limit]="10"
             [scrollbarH]="true">
 
@@ -40,43 +50,46 @@
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Merit Position" [maxWidth]="150" [draggable]="false" [sortable]="false" cellClass="text-left">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <span><strong>{{row.position}}</strong></span>
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Name" [minWidth]="450" [draggable]="false" [sortable]="false" cellClass="text-left">
-              <ng-template let-row="row" ngx-datatable-cell-template>
-                <a [placement]="'right'" ngbTooltip="User Details" href="javascript:">
-                  <strong>{{row.user_name}}</strong><br/>{{ row.email }}<br/>{{ row.phone }}
-                </a>
-              </ng-template>
-            </ngx-datatable-column>
-
-            <ngx-datatable-column name="Achieved Mark" [minWidth]="150" prop="mark" [draggable]="false"
+            <ngx-datatable-column name="Student" prop="student_name" [draggable]="false"
               [sortable]="false">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <span title="{{ row.total_achieved_mark }}"> <strong>{{ row.total_achieved_mark }}</strong> </span>
+                <span title="{{ row.student_name }}"> <strong>{{ row.student_name }} - {{ row.student_mobile_number }}</strong> </span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column name="Date" [maxWidth]="170" [draggable]="false" [sortable]="false"
+            <ngx-datatable-column name="Start Time" [draggable]="false" [sortable]="false"
               headerClass="text-center" cellClass="text-center">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <span><strong>{{ row.created_at | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A' }}</strong></span>
+                <span><strong>{{ row.start_time_gmt | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A' }}</strong></span>
               </ng-template>
             </ngx-datatable-column>
 
-            <ngx-datatable-column [maxWidth]="150" name="Action" [draggable]="false" [sortable]="false"
+            <ngx-datatable-column name="End Time" [draggable]="false" [sortable]="false"
               headerClass="text-center" cellClass="text-center">
               <ng-template let-row="row" ngx-datatable-cell-template>
-                <a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" *ngIf="row.written_exam_mark > 0" [routerLink]="['/written-result',row.id]" ngbTooltip="Written Details" href="javascript:">
-                  <i class="fa fa-file-alt"></i>
-                </a>
-                <a class="btn btn-icon btn-success btn-mini ml-1 mb-1" [placement]="'left'" (click)="getSubjectWiseResult(row, resultTemplate)" ngbTooltip="See Subject Wise Result" href="javascript:">
-                  <i class="fa fa-file-alt"></i>
-                </a>
+                <span><strong>{{ row.end_time_gmt | amLocal | amDateFormat: 'DD MMM, YYYY hh:mm A' }}</strong></span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Total Time" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span><strong>{{ row.total_minutes }}</strong></span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Actual Total Time" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <span><strong>{{ row.total_actual_minutes }}</strong></span>
+              </ng-template>
+            </ngx-datatable-column>
+
+            <ngx-datatable-column name="Duration Exceeded Limit" [draggable]="false" [sortable]="false"
+              headerClass="text-center" cellClass="text-center">
+              <ng-template let-row="row" ngx-datatable-cell-template>
+                <button type="button" *ngIf="row.has_time_exceeded" class="btn btn-outline-danger">Exceeded</button>
+                <button type="button" *ngIf="!row.has_time_exceeded" class="btn btn-outline-success">Within the Time</button>
               </ng-template>
             </ngx-datatable-column>
 

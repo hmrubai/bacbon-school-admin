@@ -55,6 +55,11 @@ export class PaidCourseCompletedClassComponent implements OnInit {
     allPaidCourseMeterialList = [];
     paidCourseResultList = [];
 
+    mentorList = [];
+    studentList = [];
+    classSummary = [];
+    classList = [];
+
     subjectWiseResult = []
 
     loggedInUsers = [];
@@ -74,6 +79,13 @@ export class PaidCourseCompletedClassComponent implements OnInit {
 
     rows = [];
     classes = [];
+
+    selected_course;
+    selected_mentor;
+    start_date;
+    end_date;
+    total_class_time = "00:00:00";
+    actual_total_time = "00:00:00";
 
     meterial_form;
     is_meterial_selected = false;
@@ -194,24 +206,84 @@ export class PaidCourseCompletedClassComponent implements OnInit {
         });
     }
 
-    changePaidCourse(paid_course){
-        if(paid_course){
+    // changePaidCourse(paid_course){
+    //     if(paid_course){
+    //         this.blockUI.start('Getting data. Please wait...');
+    //         this.loadingIndicator = true;
+    //         this._service.get('paid-course/test-list-by-id/' + paid_course.id).subscribe(res => {
+    //             this.allPaidCourseMeterialList = res.result;
+    //             this.is_meterial_selected = false;
+    //             this.loadingIndicator = false;
+    //             this.blockUI.stop();
+    //         }, err => {
+    //             this.toastr.warning(err.messaage || err, 'Warning!', { closeButton: true, disableTimeOut: false });
+    //             this.blockUI.stop();
+    //         });
+    //     }else{
+    //         this.allPaidCourseMeterialList = [];
+    //         this.meterial_form = null;
+    //         this.is_meterial_selected = false;
+    //         this.getAllPaidCourseList();
+    //     }
+    // }
+
+    changePaidCourse(course){
+        if(course){
+            this.getStudentList(course);
+
             this.blockUI.start('Getting data. Please wait...');
-            this.loadingIndicator = true;
-            this._service.get('paid-course/test-list-by-id/' + paid_course.id).subscribe(res => {
-                this.allPaidCourseMeterialList = res.result;
-                this.is_meterial_selected = false;
-                this.loadingIndicator = false;
+            this._service.get('lc/paid-course-mentors/' + course.id).subscribe(res => {
+                this.mentorList = res.data;
                 this.blockUI.stop();
             }, err => {
                 this.toastr.warning(err.messaage || err, 'Warning!', { closeButton: true, disableTimeOut: false });
                 this.blockUI.stop();
             });
-        }else{
-            this.allPaidCourseMeterialList = [];
-            this.meterial_form = null;
-            this.is_meterial_selected = false;
-            this.getAllPaidCourseList();
+        }
+        
+    }
+
+    getStudentList(course){
+        this.blockUI.start('Getting data. Please wait...');
+        this._service.get('lc/paid-course-lc-students/' + course.id).subscribe(res => {
+            this.studentList = res.data;
+            this.blockUI.stop();
+        }, err => {
+            this.toastr.warning(err.messaage || err, 'Warning!', { closeButton: true, disableTimeOut: false });
+            this.blockUI.stop();
+        });
+    }
+
+    changeFilterDate($event){
+        console.log(this.selected_course, this.selected_mentor, this.start_date, this.end_date);
+
+        if(this.selected_course && this.selected_mentor && this.start_date && this.end_date){
+            let param = {
+                "course_id": this.selected_course,
+                "mentor_id": this.selected_mentor,
+                "student_id": 0,
+                "from": this.start_date,
+                "to": this.end_date
+            }
+
+            console.log(param);
+            
+            this.blockUI.start('Getting Result. Please wait...');
+            this.loadingIndicator = true;
+            this._service.get('lc/completed-class-list', param).subscribe(res => {
+                this.classSummary = res.result;
+                this.total_class_time = res.result.total_time;
+                this.actual_total_time = res.result.actual_total_time;
+                this.classList = res.result.list;
+                setTimeout(() => {
+                    this.loadingIndicator = false;
+                    this.tableComponent.recalculate();
+                  }, 1000);
+                this.blockUI.stop();
+            }, err => {
+                this.toastr.warning(err.messaage || err, 'Warning!', { closeButton: true, disableTimeOut: false });
+                this.blockUI.stop();
+            });
         }
     }
 

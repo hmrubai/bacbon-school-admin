@@ -150,7 +150,7 @@ const NavigationItems = [
   },
   {
     id: 'life-couch',
-    title: 'Life Couch',
+    title: 'Life Coach',
     type: 'collapse',
     icon: 'fa fa-headphones',
    //permission: 'Admin,Super-Admin',

@@ -13,6 +13,7 @@ import { ConfirmService } from 'src/app/_helpers/confirm-dialog/confirm.service'
 declare var $: any;
 import * as Highcharts from 'highcharts';
 import * as moment from 'moment';
+import * as XLSX from 'xlsx';
 
 @Component({
     selector: 'app-expert-details',
@@ -41,14 +42,24 @@ export class ExpertDetailsComponent implements OnInit {
     location = []
     page = new Page();
 
+    file: File;
+    arrayBuffer: any;
+    filelist: any;
+
+    importedData:any;
+    dataImported = false;
+
     modalTitle = 'Add New Teacher';
     entryForm: FormGroup;
+    uploadMCQForm: FormGroup;
     submitted = false;
     btnSaveText = 'Save';
 
     loggedInUsers = [];
 
     selectionTest = [];
+
+    uploadableExport = [];
 
     callHistory = { list: [], total: 0 };
 
@@ -113,12 +124,21 @@ export class ExpertDetailsComponent implements OnInit {
             bio: [null, [Validators.maxLength(250)]],
         });
 
+        this.uploadMCQForm = this.formBuilder.group({
+            question_set_id: [1, [Validators.required]],
+            subject: [null, [Validators.required, Validators.maxLength(250)]],
+        });
+
         this.getAllTeacherList();
 
     }
 
     get f() {
         return this.entryForm.controls;
+    }
+
+    get uMCQf() {
+        return this.uploadMCQForm.controls;
     }
 
     getAllSelectionTestList() {
@@ -180,6 +200,28 @@ export class ExpertDetailsComponent implements OnInit {
         this.submitted = false;
         this.modalTitle = 'Add Teacher';
         this.btnSaveText = 'Save';
+
+        this.uploadableExport = [];
+    }
+
+    onExpertUploadFormSubmit(){
+        let param = {
+            teacher: this.uploadableExport
+        }
+
+        this.blockUI.start('Saving data. Please wait...');
+        this._service.post('lc/upload-teacher-excel', param).subscribe(
+            data => {
+                this.blockUI.stop();
+                this.toastr.success(data.messages, 'Success', { timeOut: 2000 });
+                this.modalHide();
+                this.getAllTeacherList();
+            },
+            err => {
+                this.blockUI.stop();
+                this.toastr.warning(err.messages || err, 'Warning!', { closeButton: true, disableTimeOut: false });
+            }
+        );
     }
 
     onFormSubmit() {
@@ -751,6 +793,31 @@ export class ExpertDetailsComponent implements OnInit {
         this.GetClassWiseLearnerCount();
         this.GetLearnerLocationRatio();
         this.loadSubjectWiseVideoCharts();
+    }
+
+    addfile(event) {
+        this.file = event.target.files[0];
+        let fileReader = new FileReader();
+        fileReader.readAsArrayBuffer(this.file);
+        fileReader.onload = (e) => {
+            this.arrayBuffer = fileReader.result;
+            var data = new Uint8Array(this.arrayBuffer);
+            var arr = new Array();
+            for (var i = 0; i != data.length; ++i) arr[i] = String.fromCharCode(data[i]);
+            var bstr = arr.join("");
+            var workbook = XLSX.read(bstr, { type: "binary" });
+            var first_sheet_name = workbook.SheetNames[0];
+            var worksheet = workbook.Sheets[first_sheet_name];
+            this.importedData = XLSX.utils.sheet_to_json(worksheet, { raw: false });
+            this.dataImported = true;
+            this.filelist = this.file;
+            console.log(this.importedData)
+            this.uploadableExport = this.importedData;
+        }
+    }
+
+    removeFromExpertList(index){
+        this.uploadableExport.splice(index, 1);
     }
 
     getDateTimeFormat(value: Date) {

@@ -47,6 +47,7 @@ export class PaidCourseMentorsComponent implements OnInit {
     modalTitle = 'Add Mentor';
     entryForm: FormGroup;
     featuresForm: FormGroup;
+    uploadMCQForm: FormGroup;
     submitted = false;
     btnSaveText = 'Save';
 
@@ -56,6 +57,8 @@ export class PaidCourseMentorsComponent implements OnInit {
 
     importedData:any;
     dataImported = false;
+
+    uploadableExport = [];
 
     loggedInUsers = [];
 
@@ -140,6 +143,11 @@ export class PaidCourseMentorsComponent implements OnInit {
             dateInputFormat: 'DD-MM-YYYY'
         });
 
+        this.uploadMCQForm = this.formBuilder.group({
+            question_set_id: [1, [Validators.required]],
+            subject: [null, [Validators.required, Validators.maxLength(250)]],
+        });
+
         this.entryForm = this.formBuilder.group({
             id: [null],
             paid_course_id: [null, [Validators.required, Validators.maxLength(250)]],
@@ -163,7 +171,6 @@ export class PaidCourseMentorsComponent implements OnInit {
         this.getAllPaidCourseMentorList();
         this.getAllTeacherList();
 
-
     }
 
     get ff() {
@@ -172,6 +179,18 @@ export class PaidCourseMentorsComponent implements OnInit {
 
     get f() {
         return this.entryForm.controls;
+    }
+
+    get uMCQf() {
+        return this.uploadMCQForm.controls;
+    }
+
+    customSearchFn(term: string, item: any) {
+        const termLowerCase = term.toLowerCase();
+        return (
+            item.name.toLowerCase().includes(termLowerCase) ||
+            item.mobile_number.toLowerCase().includes(termLowerCase)
+        );
     }
 
     getAllPaidCourseSubjectList() {
@@ -345,7 +364,12 @@ export class PaidCourseMentorsComponent implements OnInit {
             this.dataImported = true;
             this.filelist = this.file;
             console.log(this.importedData)
+            this.uploadableExport = this.importedData;
         }
+    }
+
+    removeFromExpertList(index){
+        this.uploadableExport.splice(index, 1);
     }
 
     onUrlPasteEvent(event: any){

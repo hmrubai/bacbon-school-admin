@@ -1,5 +1,4 @@
-<block-ui>
-  <div class="row ">
+<div class="row ">
     <div class="col-12 ">
       <div class="card mb-0">
         <div class="card-header row">
@@ -10,6 +9,8 @@
             <button class="btn btn-success btn-mini float-right" [placement]="'left'" ngbTooltip="Add New Teacher" (click)="openModal(template)">
               <i class="fa fa-plus"></i> Add New Teacher
             </button>
+            <button class="btn btn-success btn-mini float-right mr-2" [placement]="'left'" ngbTooltip="Upload Expert" (click)="openModal(UploadExpertTemplate)">
+              <i class="fa fa-arrow-circle-up"></i> Upload Expert</button>
           </div>
         </div>
         <div class="card-body p-0">
@@ -45,9 +46,9 @@
         </div>
       </div>
     </div>
-  </div>
-  <br>
-</block-ui>
+</div>
+<br>
+<block-ui></block-ui>
 
 <ng-template #template>
     <div class="modal-header ">
@@ -85,7 +86,7 @@
           </div>
           <div class="col-6">
             <div class="form-group">
-              <label class="col-form-label required">Email </label>
+              <label class="col-form-label">Email </label>
               <input type="email" formControlName="email" [ngClass]="{ 'is-invalid': submitted && f.email.errors }"
                 placeholder="Enter Email" class="form-control" />
               <div *ngIf="submitted && f.email.errors" class="error-text">
@@ -96,7 +97,7 @@
           </div>
           <div class="col-6">
             <div class="form-group">
-              <label class="col-form-label required">Institute </label>
+              <label class="col-form-label">Institute </label>
               <input type="text" formControlName="institute" [ngClass]="{ 'is-invalid': submitted && f.institute.errors }"
                 placeholder="Enter Institute" class="form-control" />
               <div *ngIf="submitted && f.institute.errors" class="error-text">
@@ -107,18 +108,18 @@
           </div>
           <div class="col-6">
             <div class="form-group">
-              <label class="col-form-label required">Experiance </label>
+              <label class="col-form-label">Expariance </label>
               <input type="text" formControlName="experiance" [ngClass]="{ 'is-invalid': submitted && f.experiance.errors }"
-                placeholder="Enter Experiance" class="form-control" />
+                placeholder="Enter Expariance" class="form-control" />
               <div *ngIf="submitted && f.experiance.errors" class="error-text">
-                <span *ngIf="f.experiance.errors.required" class="text-danger">Experiance is required</span>
-                <span *ngIf="f.experiance.errors.maxlength" class="text-danger">Experiance must be within 250 characters</span>
+                <span *ngIf="f.experiance.errors.required" class="text-danger">Expariance is required</span>
+                <span *ngIf="f.experiance.errors.maxlength" class="text-danger">Expariance must be within 250 characters</span>
               </div>
             </div>
           </div>
           <div class="col-12">
             <div class="form-group">
-              <label class="col-form-label required">Bio/Success Story </label>
+              <label class="col-form-label">Bio/Success Story </label>
               <input type="text" formControlName="bio" [ngClass]="{ 'is-invalid': submitted && f.bio.errors }"
                 placeholder="Enter Success Story" class="form-control" />
               <div *ngIf="submitted && f.bio.errors" class="error-text">
@@ -127,9 +128,6 @@
               </div>
             </div>
           </div>
-          
-          
-
         </div>
       </form>
     </div>
@@ -137,4 +135,74 @@
       <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
       <button class="btn btn-success btn-sm" (click)="onFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
     </div>
-  </ng-template>
+</ng-template>
+
+<ng-template #UploadExpertTemplate>
+    <div class="modal-header ">
+        <h4 class="modal-title pull-left" id="modalTitle"> <i class="fa fa-users"></i> Upload Expert</h4>
+        <button type="button " class="close pull-right " aria-label="Close " (click)="modalHide()">
+            <i class="feather icon-x"></i>
+        </button>
+    </div>
+    <div class="modal-body ">
+        <app-card>
+          <form [formGroup]="uploadMCQForm">
+            <div class="row">
+                <div class="col-sm-12" >
+                    <div class="form-group">
+                        <label class="col-form-label required"> Select File </label>
+                        <input type="file" class="form-control" (change)="addfile($event)" placeholder="Upload file" accept=".csv,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet, application/vnd.ms-excel">
+                    </div>
+                </div>
+            </div>
+          </form>
+            <div class="row">
+              <div class="col-sm-12">
+                <div class="table-responsive">
+                  <table class="table table-sm table-hover table-bordered table-striped">
+                    <thead>
+                      <tr>
+                        <th scope="col"># </th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Mobile</th>
+                        <th scope="col">Email</th>
+                        <th scope="col">Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let item of uploadableExport; let i=index">
+                        <td>{{i+1}}</td>
+                        <td> 
+                          <strong>{{item.name}}</strong>
+                        </td>
+                        <td> 
+                          <strong>{{item.mobile}}</strong>
+                        </td>
+                        <td> 
+                          <strong> {{item.email}}</strong>
+                        </td>
+                        <td>
+                          <a class="btn btn-icon btn-danger btn-mini ml-1 mb-1" [placement]="'left'" ngbTooltip="Delete" (click)="removeFromExpertList(i)">
+                            <i class="fa fa-trash"></i>
+                          </a>
+                        </td>
+                      </tr>
+                      <tr *ngIf="uploadableExport.length <= 0">
+                        <td colspan="5"> 
+                          <strong>No Item Found</strong>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+            </div>
+        </app-card>
+    </div>
+    <div class="modal-footer">
+        <div class="pr-4">
+            <button class="btn btn-outline-secondary btn-sm mr-2" (click)="modalHide()"> <i class="feather icon-x"></i>Close</button>
+            <button class="btn btn-success btn-sm" (click)="onExpertUploadFormSubmit()"><i class="feather icon-save"></i>{{btnSaveText}}</button>
+        </div>
+    </div>
+</ng-template>

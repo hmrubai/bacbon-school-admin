@@ -290,6 +290,14 @@ export class PaidCourseSEMacthingComponent implements OnInit {
         this.mappingList.splice(index, 1);
     }
 
+    customSearchFn(term: string, item: any) {
+        const termLowerCase = term.toLowerCase();
+        return (
+            item.name.toLowerCase().includes(termLowerCase) ||
+            item.mobile_number.toLowerCase().includes(termLowerCase)
+        );
+    }
+
     findUserById(list, id) {
         return list.find(item => item.id === id);
     }
