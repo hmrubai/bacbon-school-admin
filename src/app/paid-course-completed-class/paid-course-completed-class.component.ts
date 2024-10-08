@@ -82,10 +82,14 @@ export class PaidCourseCompletedClassComponent implements OnInit {
 
     selected_course;
     selected_mentor;
+    selected_student;
     start_date;
     end_date;
     total_class_time = "00:00:00";
     actual_total_time = "00:00:00";
+
+    student_total_class_time = "00:00:00";
+    student_actual_total_time = "00:00:00";
 
     meterial_form;
     is_meterial_selected = false;
@@ -229,7 +233,7 @@ export class PaidCourseCompletedClassComponent implements OnInit {
 
     changePaidCourse(course){
         if(course){
-            this.getStudentList(course);
+            //this.getStudentList(course);
 
             this.blockUI.start('Getting data. Please wait...');
             this._service.get('lc/paid-course-mentors/' + course.id).subscribe(res => {
@@ -243,9 +247,9 @@ export class PaidCourseCompletedClassComponent implements OnInit {
         
     }
 
-    getStudentList(course){
+    getStudentList(){
         this.blockUI.start('Getting data. Please wait...');
-        this._service.get('lc/paid-course-lc-students/' + course.id).subscribe(res => {
+        this._service.get('lc/paid-course-lc-students-by-mentor/' + this.selected_course + '/' + this.selected_mentor).subscribe(res => {
             this.studentList = res.data;
             this.blockUI.stop();
         }, err => {
@@ -261,7 +265,7 @@ export class PaidCourseCompletedClassComponent implements OnInit {
             let param = {
                 "course_id": this.selected_course,
                 "mentor_id": this.selected_mentor,
-                "student_id": 0,
+                "student_id": this.selected_student,
                 "from": this.start_date,
                 "to": this.end_date
             }
@@ -274,6 +278,9 @@ export class PaidCourseCompletedClassComponent implements OnInit {
                 this.classSummary = res.result;
                 this.total_class_time = res.result.total_time;
                 this.actual_total_time = res.result.actual_total_time;
+
+                this.student_total_class_time = res.result.student_total_time;
+                this.student_actual_total_time = res.result.student_actual_total_time;
                 this.classList = res.result.list;
                 setTimeout(() => {
                     this.loadingIndicator = false;
