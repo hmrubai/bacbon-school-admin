@@ -104,6 +104,12 @@
                 <a class="btn btn-icon btn-success btn-mini ml-1 mb-1" [placement]="'left'" (click)="getSubjectWiseResult(row, resultTemplate)" ngbTooltip="See Subject Wise Result" href="javascript:">
                   <i class="fa fa-file-alt"></i>
                 </a>
+                <a class="btn btn-icon btn-info btn-mini ml-1 mb-1" [placement]="'left'" (click)="downloadAsPdf(row)" ngbTooltip="Download Result as PDF" href="javascript:">
+                  <i class="fa fa-download"></i>
+                </a>
+                <a class="btn btn-icon btn-warning btn-mini ml-1 mb-1" [placement]="'left'" (click)="downloadAsExcel(row)" ngbTooltip="Download Result as Excel" href="javascript:">
+                  <i class="fa fa-download"></i>
+                </a>
               </ng-template>
             </ngx-datatable-column>
 

@@ -251,6 +251,47 @@ export class PaidCourseResultsComponent implements OnInit {
         });
     }
 
+    downloadAsPdf(row){
+        console.log(row)
+        //paid-course/download-paid-course-quiz-result-pdf
+        //download-paid-course-quiz-result-pdf
+
+        this.blockUI.start('Generating report. Please wait...');
+        this._service.downloadFile('paid-course/download-pc-quiz-result-pdf/' + row.id).subscribe(res => {
+            this.blockUI.stop();
+
+            const url = window.URL.createObjectURL(res);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = row.user_name + '_' + row.id + "_Paid_Course_Test_Result";
+            link.click();
+        },
+        err => {
+            this.toastr.warning(err.messages || err, 'Warning!');
+            this.blockUI.stop();
+        });
+    }
+
+    downloadAsExcel(row){
+        console.log(row)
+        //paid-course/download-paid-course-quiz-result-pdf
+        //download-paid-course-quiz-result-pdf
+
+        this.blockUI.start('Generating report. Please wait...');
+        this._service.downloadFile('paid-course/download-pc-quiz-result-excel/' + row.id).subscribe(res => {
+            this.blockUI.stop();
+
+            const url = window.URL.createObjectURL(res);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = row.user_name + '_' + row.id + "_Paid_Course_Test_Result";
+            link.click();
+        },
+        err => {
+            this.toastr.warning(err.messages || err, 'Warning!');
+            this.blockUI.stop();
+        });
+    }
 
     downloadResult(){
         this.blockUI.start('Generating report. Please wait...');
