@@ -26,7 +26,8 @@
           <div class="col-md-3 col-12">
             <button class="btn btn-secondary" disabled *ngIf="!is_meterial_selected">Download</button>
             <button class="btn btn-success mr-2" (click)="downloadResult()" *ngIf="is_meterial_selected">Download</button>
-            <button class="btn btn-success" (click)="downloadSubjectWiseResult()" *ngIf="is_meterial_selected">Download Subject Wise Result</button>
+            <button class="btn btn-success mr-2" (click)="downloadAllResultAsExcel()" *ngIf="is_meterial_selected">Download All</button>
+            <button class="btn btn-success" (click)="downloadSubjectWiseResult()" *ngIf="is_meterial_selected">Download Subject Wise</button>
           </div>
         </div>
         <div class="card-body p-0">

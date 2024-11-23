@@ -293,6 +293,42 @@ export class PaidCourseResultsComponent implements OnInit {
         });
     }
 
+    // downloadAllResultAsExcel(row){
+    //     console.log(row)
+
+    //     this.blockUI.start('Generating report. Please wait...');
+    //     this._service.downloadFile('paid-course/download-pc-quiz-all-result-excel/' + row.id).subscribe(res => {
+    //         this.blockUI.stop();
+
+    //         const url = window.URL.createObjectURL(res);
+    //         var link = document.createElement('a');
+    //         link.href = url;
+    //         link.download = row.user_name + '_' + row.id + "_Paid_Course_Test_Result";
+    //         link.click();
+    //     },
+    //     err => {
+    //         this.toastr.warning(err.messages || err, 'Warning!');
+    //         this.blockUI.stop();
+    //     });
+    // }
+
+    downloadAllResultAsExcel(){
+        this.blockUI.start('Generating report. Please wait...');
+        this._service.downloadFile('paid-course/download-pc-quiz-all-result-excel/' + this.meterial_form).subscribe(res => {
+            this.blockUI.stop();
+
+            const url = window.URL.createObjectURL(res);
+            var link = document.createElement('a');
+            link.href = url;
+            link.download = "Paid Course Exam Results";
+            link.click();
+        },
+        err => {
+            this.toastr.warning(err.messages || err, 'Warning!');
+            this.blockUI.stop();
+        });
+    }
+
     downloadResult(){
         this.blockUI.start('Generating report. Please wait...');
         this._service.downloadFile('paid-course/test-result-excel/' + this.meterial_form).subscribe(res => {

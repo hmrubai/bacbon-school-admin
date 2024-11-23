@@ -82,7 +82,7 @@ export class PaidCourseTestComponent implements OnInit {
     testType = [
         {
             id: 'RevisionTest',
-            name: 'Revision Test'
+            name: 'Revision/Daily/Chapter Test'
         },
         {
             id: 'ModelTest',
@@ -90,7 +90,23 @@ export class PaidCourseTestComponent implements OnInit {
         },
         {
             id: 'WeeklyTest',
-            name: 'Weekly Test'
+            name: 'Weekly Test/Review Test'
+        },
+        {
+            id: 'PaperTest',
+            name: 'Paper Test'
+        },
+        {
+            id: 'SubjectTest',
+            name: 'Subject Test'
+        },
+        {
+            id: 'MedicalPreviousQB',
+            name: 'Medical Previous Year Question Bank'
+        },
+        {
+            id: 'DentalPreviousQB',
+            name: 'Dental Previous Year Question Bank'
         }
     ]
 
